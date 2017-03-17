@@ -10,51 +10,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top">
-
-        <ImageButton
-            android:id="@+id/imageButtonHelp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:background="@android:color/transparent"
-            android:backgroundTint="@android:color/transparent"
-            android:elevation="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/icon_help" />
-
-        <ImageButton
-            android:id="@+id/imageButtonSettings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:layout_toStartOf="@+id/imageButtonHelp"
-            android:background="@android:color/transparent"
-            android:backgroundTint="@android:color/transparent"
-            android:elevation="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/icon_settings" />
-
-        <ImageButton
-            android:id="@+id/imageButtonHome"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:background="@android:color/transparent"
-            android:backgroundTint="@android:color/transparent"
-            android:elevation="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/icon_home" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_gravity="bottom">
 
@@ -84,4 +39,126 @@
             app:srcCompat="@drawable/logo_cre" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top">
+
+        <ImageButton
+            android:id="@+id/imageButtonHelp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/icon_help" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/logo_solarnt" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="is a project by the Centre for Renewable Energy.  Please support by donating to keep SolarNT available to everyone."
+            android:textAlignment="center"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/buttonDonate"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:layout_toStartOf="@+id/imageButtonHelp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:drawableLeft="@drawable/icon_donate"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            android:text=" Donate"
+            android:textAllCaps="false"
+            android:textColor="@android:color/holo_red_light"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchSolarUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="true"
+            android:text="@string/pref_title_solar_user"
+            android:textOff="N"
+            android:textOn="Y" />
+
+        <Switch
+            android:id="@+id/switchLiveUploader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="true"
+            android:text="@string/pref_title_live_uploader"
+            android:textOff="N"
+            android:textOn="Y" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/imageButtonSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@+id/imageButtonHelp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/icon_settings"
+                android:elevation="8dp"
+                android:scaleType="fitCenter"
+                android:text=" Settings"
+                android:textAllCaps="false"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonDashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@+id/imageButtonHelp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/icon_dashboard"
+                android:elevation="8dp"
+                android:scaleType="fitCenter"
+                android:text=" Dashboard"
+                android:textAllCaps="false"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </FrameLayout>
