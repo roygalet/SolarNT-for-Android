@@ -16,6 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
+import java.util.Date;
+
 public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,17 @@ public class HomeActivity extends AppCompatActivity {
         if(getSharedPreferences("General", MODE_PRIVATE)==null) {
             SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
             editor.putBoolean("solar_user", false);
+            editor.putBoolean("live_uploader", false);
+
+            editor.putLong("location_last_refresh", (new Date()).getTime());
+            editor.putString("post_code", "0800");
+            editor.putString("suburb", "Darwin");
+            editor.putFloat("latitude", (float) -12.459);
+            editor.putFloat("longitude", (float) 130.847);
+
+            editor.putLong("weather_last_refresh", (new Date()).getTime());
+
+            editor.putLong("output_last_refresh", (new Date()).getTime());
             editor.commit();
         }
 
@@ -42,6 +55,8 @@ public class HomeActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                     editor.putBoolean("solar_user", switchSolarUser.isChecked());
+
+
                     if(!switchSolarUser.isChecked()){
                         editor.putBoolean("live_uploader", false);
                     }
@@ -113,6 +128,16 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(HomeActivity.this, HelpActivity.class));
+                }
+            });
+        }
+
+        Button buttonDashboard = (Button)findViewById(R.id.buttonDashboard);
+        if(buttonDashboard != null) {
+            buttonDashboard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(HomeActivity.this, DashboardActivity.class));
                 }
             });
         }

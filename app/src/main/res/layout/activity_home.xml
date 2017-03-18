@@ -102,6 +102,7 @@
             android:id="@+id/switchSolarUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:showText="true"
             android:text="@string/pref_title_solar_user"
             android:textOff="N"
@@ -111,14 +112,18 @@
             android:id="@+id/switchLiveUploader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:showText="true"
             android:text="@string/pref_title_live_uploader"
             android:textOff="N"
             android:textOn="Y" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -126,6 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_alignParentTop="true"
+                android:layout_gravity="center"
                 android:layout_margin="8dp"
                 android:layout_toStartOf="@+id/imageButtonHelp"
                 android:layout_weight="1"
@@ -133,8 +139,11 @@
                 android:backgroundTint="@android:color/transparent"
                 android:drawableLeft="@drawable/icon_settings"
                 android:elevation="8dp"
+                android:foregroundGravity="center"
+                android:gravity="center"
                 android:scaleType="fitCenter"
                 android:text=" Settings"
+                android:textAlignment="textStart"
                 android:textAllCaps="false"
                 android:textColor="@android:color/holo_green_dark"
                 android:textStyle="bold" />
@@ -144,6 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"
+                android:layout_gravity="center"
                 android:layout_margin="8dp"
                 android:layout_toStartOf="@+id/imageButtonHelp"
                 android:layout_weight="1"
@@ -151,8 +161,11 @@
                 android:backgroundTint="@android:color/transparent"
                 android:drawableLeft="@drawable/icon_dashboard"
                 android:elevation="8dp"
+                android:foregroundGravity="center"
+                android:gravity="center"
                 android:scaleType="fitCenter"
                 android:text=" Dashboard"
+                android:textAlignment="textStart"
                 android:textAllCaps="false"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textSize="24sp"

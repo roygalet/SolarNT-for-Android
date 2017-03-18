@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="100dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="au.edu.cdu.solarnt.DashboardActivity"
+    tools:showIn="@layout/activity_dashboard">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:foregroundGravity="top|center_horizontal"
+        android:padding="16dp"
+        android:textAlignment="center"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:flexWrap="wrap"
+        app:justifyContent="center">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="256dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp"
+            app:cardBackgroundColor="@color/white_overlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="101dp"
+                    android:background="@android:color/white">
+
+                    <ImageView
+                        android:id="@+id/imageViewWeatherCondition"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        app:srcCompat="@drawable/clear" />
+
+                    <TextView
+                        android:id="@+id/textViewSolarIrradiance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
+                        android:text="1000"
+                        android:textAlignment="textEnd"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/textViewSolarIrradiance"
+                        android:layout_below="@+id/textViewSolarIrradiance"
+                        android:layout_marginEnd="10dp"
+                        android:text="W/sqm" />
+
+                    <TextView
+                        android:id="@+id/textViewTemperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:text="32\u00B0C"
+                        android:textAlignment="textStart"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textViewWeatherCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:text="Weather Condition"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/buttonMoreWeather"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="More"
+                        android:textColor="@android:color/holo_green_dark" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp">
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp">
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp">
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp">
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:layout_margin="4dp">
+
+        </android.support.v7.widget.CardView>
+
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</android.support.v4.widget.NestedScrollView>

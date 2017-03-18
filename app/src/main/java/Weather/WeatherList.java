@@ -82,4 +82,18 @@ public class WeatherList {
         }
         return weatherData;
     }
+
+    public WeatherData getClosestSuburb(float latitude, float longitude){
+        WeatherData closestSuburb = weatherList.get(0);
+        float closestDistance=9999999;
+        for(int i=1; i<weatherList.size(); i++){
+            WeatherData currentSuburb = weatherList.get(i);
+            float currentDistance = (float) Math.pow(Math.pow(currentSuburb.getLatitude()-latitude,2) + Math.pow(currentSuburb.getLongitude()-longitude,2),0.5);
+            if(currentDistance < closestDistance){
+                closestSuburb = currentSuburb;
+                closestDistance = currentDistance;
+            }
+        }
+        return closestSuburb;
+    }
 }
