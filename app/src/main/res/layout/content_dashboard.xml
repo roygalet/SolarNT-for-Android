@@ -44,11 +44,13 @@
                         app:srcCompat="@drawable/clear" />
 
                     <TextView
-                        android:id="@+id/textViewSolarIrradiance"
+                        android:id="@+id/textViewSolarRadiation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/textViewMeanSolarRadiation"
+                        android:layout_alignBottom="@+id/textViewMeanSolarRadiation"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:text="1000"
                         android:textAlignment="textEnd"
@@ -59,13 +61,13 @@
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/textViewSolarIrradiance"
-                        android:layout_below="@+id/textViewSolarIrradiance"
+                        android:layout_alignEnd="@+id/textViewSolarRadiation"
+                        android:layout_below="@+id/textViewSolarRadiation"
                         android:layout_marginEnd="10dp"
                         android:text="W/sqm" />
 
                     <TextView
-                        android:id="@+id/textViewTemperature"
+                        android:id="@+id/textViewMeanSolarRadiation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"

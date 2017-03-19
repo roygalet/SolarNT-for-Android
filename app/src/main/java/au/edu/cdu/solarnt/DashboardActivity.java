@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,16 +17,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 import Weather.WeatherData;
@@ -38,6 +45,8 @@ public class DashboardActivity extends AppCompatActivity {
     String[] suburbs;
     LocationManager locationManager;
     LocationListener locationListener;
+    String responseWeatherCondition = "{\"response\":{\"version\":\"0.1\",\"termsofService\":\"http://www.wunderground.com/weather/api/d/terms.html\",\"features\":{\"conditions\":1}},\"current_observation\":{\"image\":{\"url\":\"http://icons.wxug.com/graphics/wu2/logo_130x80.png\",\"title\":\"Weather Underground\",\"link\":\"http://www.wunderground.com\"},\"display_location\":{\"full\":\"Brinkin, Australia\",\"city\":\"Brinkin\",\"state\":\"NTR\",\"state_name\":\"Australia\",\"country\":\"AU\",\"country_iso3166\":\"AU\",\"zip\":\"00000\",\"magic\":\"8\",\"wmo\":\"94120\",\"latitude\":\"-12.370000\",\"longitude\":\"130.860000\",\"elevation\":\"14.9\"},\"observation_location\":{\"full\":\"Halkitis Court, Nightcliff, NT\",\"city\":\"Halkitis Court, Nightcliff\",\"state\":\"NT\",\"country\":\"AU\",\"country_iso3166\":\"AU\",\"latitude\":\"-12.391690\",\"longitude\":\"130.850708\",\"elevation\":\"26 ft\"},\"estimated\":{},\"station_id\":\"INTNIGHT2\",\"observation_time\":\"Last Updated on March 18, 1:16 PM ACST\",\"observation_time_rfc822\":\"Sat, 18 Mar 2017 13:16:37 +0930\",\"observation_epoch\":\"1489808797\",\"local_time_rfc822\":\"Sat, 18 Mar 2017 13:24:52 +0930\",\"local_epoch\":\"1489809292\",\"local_tz_short\":\"ACST\",\"local_tz_long\":\"Australia/Darwin\",\"local_tz_offset\":\"+0930\",\"weather\":\"Scattered Clouds\",\"temperature_string\":\"86.7 F (30.4 C)\",\"temp_f\":86.7,\"temp_c\":30.4,\"relative_humidity\":\"79%\",\"wind_string\":\"From the NNE at 3.1 MPH Gusting to 6.2 MPH\",\"wind_dir\":\"NNE\",\"wind_degrees\":19,\"wind_mph\":3.1,\"wind_gust_mph\":\"6.2\",\"wind_kph\":5,\"wind_gust_kph\":\"10.0\",\"pressure_mb\":\"1008\",\"pressure_in\":\"29.77\",\"pressure_trend\":\"0\",\"dewpoint_string\":\"80 F (26 C)\",\"dewpoint_f\":80,\"dewpoint_c\":26,\"heat_index_string\":\"101 F (39 C)\",\"heat_index_f\":101,\"heat_index_c\":39,\"windchill_string\":\"NA\",\"windchill_f\":\"NA\",\"windchill_c\":\"NA\",\"feelslike_string\":\"101 F (39 C)\",\"feelslike_f\":\"101\",\"feelslike_c\":\"39\",\"visibility_mi\":\"6.2\",\"visibility_km\":\"10.0\",\"solarradiation\":\"--\",\"UV\":\"12\",\"precip_1hr_string\":\"0.02 in ( 1 mm)\",\"precip_1hr_in\":\"0.02\",\"precip_1hr_metric\":\" 1\",\"precip_today_string\":\"0.02 in (1 mm)\",\"precip_today_in\":\"0.02\",\"precip_today_metric\":\"1\",\"icon\":\"partlycloudy\",\"icon_url\":\"http://icons.wxug.com/i/c/k/partlycloudy.gif\",\"forecast_url\":\"http://www.wunderground.com/global/stations/94120.html\",\"history_url\":\"http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=INTNIGHT2\",\"ob_url\":\"http://www.wunderground.com/cgi-bin/findweather/getForecast?query=-12.391690,130.850708\",\"nowcast\":\"\"}}";
+    String responseSolarRadiation = "{\"forecasts\":[{\"ghi\":796,\"ghi90\":923,\"ghi10\":605,\"ebh\":430,\"dni\":468,\"dni10\":176,\"dni90\":763,\"dhi\":367,\"air_temp\":30,\"zenith\":22,\"azimuth\":62,\"cloud_opacity\":36,\"period_end\":\"2017-03-18T05:00:00.0000000Z\",\"period\":\"PT30M\"}]}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,7 @@ public class DashboardActivity extends AppCompatActivity {
         final ImageView imageViewCancel = (ImageView) findViewById(R.id.imageViewCancel);
         final TextView textViewLocation = (TextView) findViewById(R.id.textViewLocation);
         final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.imageViewGeolocate);
+        Button buttonMoreWeather = (Button) findViewById(R.id.buttonMoreWeather);
 
         loadSuburbs();
         setupButtons();
@@ -55,8 +65,10 @@ public class DashboardActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         float latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
         float longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
+        responseWeatherCondition = sharedPreferences.getString("weather_condition", responseWeatherCondition);
+        responseSolarRadiation = sharedPreferences.getString("solar_radiation", responseSolarRadiation);
 
-        WeatherData closestSuburb = weatherList.getClosestSuburb(latitude, longitude);
+        final WeatherData closestSuburb = weatherList.getClosestSuburb(latitude, longitude);
 
 
         if (textViewLocation != null) {
@@ -102,6 +114,7 @@ public class DashboardActivity extends AppCompatActivity {
                 editor.putFloat("longitude", weatherData.getLongitude());
                 editor.putString("post_code", weatherData.getPostcode());
                 editor.putString("suburb", weatherData.getSuburb());
+                editor.commit();
                 textViewLocation.setVisibility(View.VISIBLE);
                 imageViewSearch.setVisibility(View.VISIBLE);
                 imageViewGeolocate.setVisibility(View.VISIBLE);
@@ -140,6 +153,31 @@ public class DashboardActivity extends AppCompatActivity {
             });
 
         }
+
+        if(buttonMoreWeather!=null){
+            buttonMoreWeather.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("weather", closestSuburb);
+                    Intent intent = new Intent(DashboardActivity.this, WeatherActivity.class);
+                    intent.putExtra("weather", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+//        if(((new Date().getTime())-sharedPreferences.getLong("weather_last_refresh", new Date().getTime()))>1000*60*30) {
+            new WeatherConditionsReader().execute();
+//        }else{
+//            refreshDisplayWeather(sharedPreferences.getString("weather_condition", responseWeatherCondition));
+//        }
+
+//        if(((new Date().getTime())-sharedPreferences.getLong("solar_last_refresh", new Date().getTime()))>1000*60*30) {
+            new SolarRadiationReader().execute();
+//        }else{
+//            refreshDisplaySolarRadiation(sharedPreferences.getString("solar_radiation", responseSolarRadiation));
+//        }
+
     }
 
     private void setupButtons(){
@@ -287,5 +325,192 @@ public class DashboardActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+
+    public String generateWeatherConditionURL(){
+        float latitude, longitude;
+        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
+        longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
+        System.out.println("http://api.wunderground.com/api/a5d5665e6d63f78c/conditions/q/" + String.valueOf(latitude) + ","+ String.valueOf(longitude) +".json");
+        return "http://api.wunderground.com/api/a5d5665e6d63f78c/conditions/q/" + String.valueOf(latitude) + ","+ String.valueOf(longitude) +".json";
+    }
+
+    private class WeatherConditionsReader extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String urlString = generateWeatherConditionURL();
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+//                    System.out.println("Response: > " + line);   //here u ll get whole responseTemp...... :-)
+
+                }
+
+                return buffer.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String aString) {
+            super.onPostExecute(aString);
+
+            refreshDisplayWeather(aString);
+        }
+
+
+    }
+
+    public void refreshDisplayWeather(String weatherCondition){
+        JSONObject mainObject = null;
+        try {
+            mainObject = (new JSONObject(weatherCondition)).getJSONObject("current_observation");
+            if(mainObject!=null) {
+                responseWeatherCondition = weatherCondition;
+                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                editor.putString("weather_condition", responseWeatherCondition);
+                editor.putLong("weather_last_refresh", (new Date()).getTime());
+                editor.commit();
+                ImageView imageViewWeatherCondition = (ImageView) findViewById(R.id.imageViewWeatherCondition);
+                if (imageViewWeatherCondition != null) {
+                    imageViewWeatherCondition.setImageResource(getResources().getIdentifier("@drawable/" + mainObject.getString("icon"), "id", getPackageName()));
+                }
+
+
+                TextView textViewTemperature = (TextView) findViewById(R.id.textViewMeanSolarRadiation);
+                if (textViewTemperature != null) {
+                    textViewTemperature.setText(String.valueOf(mainObject.getDouble("temp_c")).concat("\u00B0C"));
+                }
+
+                TextView textViewWeatherCondition = (TextView) findViewById(R.id.textViewWeatherCondition);
+                if (textViewWeatherCondition != null) {
+                    textViewWeatherCondition.setText(mainObject.getString("weather"));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String generateSolarRadiationURL(){
+        float latitude, longitude;
+        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
+        longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
+        System.out.println("https://api.solcast.com.au/radiation/forecasts?longitude="+ String.valueOf(longitude) +"&latitude=" + String.valueOf(latitude) + "&api_key=f_uSmb6y_aXCua_Wal8UJXKMdDK_JmGi&format=json");
+        return "https://api.solcast.com.au/radiation/forecasts?longitude="+ String.valueOf(longitude) +"&latitude=" + String.valueOf(latitude) + "&api_key=f_uSmb6y_aXCua_Wal8UJXKMdDK_JmGi&format=json";
+
+    }
+
+    private class SolarRadiationReader extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String urlString = generateSolarRadiationURL();
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                }
+
+                return buffer.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String aString) {
+            super.onPostExecute(aString);
+
+            refreshDisplaySolarRadiation(aString);
+        }
+
+
+    }
+
+    public void refreshDisplaySolarRadiation(String solarRadiation){
+        JSONObject mainObject = null;
+        try {
+            mainObject = (new JSONObject(solarRadiation)).getJSONArray("forecasts").getJSONObject(0);
+            if(mainObject!=null) {
+                responseSolarRadiation = solarRadiation;
+                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                editor.putString("solar_radiation", responseSolarRadiation);
+                editor.putLong("solar_last_refresh", (new Date()).getTime());
+                editor.commit();
+
+                TextView textViewSolarRadiation = (TextView) findViewById(R.id.textViewSolarRadiation);
+                if (textViewSolarRadiation != null) {
+                    textViewSolarRadiation.setText(Integer.toString(mainObject.getInt("dni")));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

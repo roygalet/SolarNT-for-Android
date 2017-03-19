@@ -3,6 +3,7 @@
     package="au.edu.cdu.solarnt">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,6 +34,10 @@
         <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".WeatherActivity"
+            android:label="@string/title_activity_weather"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
