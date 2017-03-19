@@ -47,6 +47,12 @@ public class HomeActivity extends AppCompatActivity {
             editor.putLong("solar_last_refresh", (new Date()).getTime());
             editor.putString("solar_radiation","\"{\\\"forecasts\\\":[{\\\"ghi\\\":796,\\\"ghi90\\\":923,\\\"ghi10\\\":605,\\\"ebh\\\":430,\\\"dni\\\":468,\\\"dni10\\\":176,\\\"dni90\\\":763,\\\"dhi\\\":367,\\\"air_temp\\\":30,\\\"zenith\\\":22,\\\"azimuth\\\":62,\\\"cloud_opacity\\\":36,\\\"period_end\\\":\\\"2017-03-18T05:00:00.0000000Z\\\",\\\"period\\\":\\\"PT30M\\\"}]}\"");
 
+            editor.putFloat("flat_rate_tariff", (float) 0.2595);
+            editor.putFloat("min_efficiency", (float) 0.735851183);
+            editor.putFloat("max_efficiency", (float) 1.001635544);
+            editor.putFloat("recent_selected_capacity", (float) 4.5);
+            editor.putFloat("recent_selected_cost", (float) 5000);
+
             editor.putLong("output_last_refresh", (new Date()).getTime());
             editor.commit();
         }

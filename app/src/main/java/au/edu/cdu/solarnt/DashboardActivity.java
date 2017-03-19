@@ -47,6 +47,7 @@ public class DashboardActivity extends AppCompatActivity {
     LocationListener locationListener;
     String responseWeatherCondition = "{\"response\":{\"version\":\"0.1\",\"termsofService\":\"http://www.wunderground.com/weather/api/d/terms.html\",\"features\":{\"conditions\":1}},\"current_observation\":{\"image\":{\"url\":\"http://icons.wxug.com/graphics/wu2/logo_130x80.png\",\"title\":\"Weather Underground\",\"link\":\"http://www.wunderground.com\"},\"display_location\":{\"full\":\"Brinkin, Australia\",\"city\":\"Brinkin\",\"state\":\"NTR\",\"state_name\":\"Australia\",\"country\":\"AU\",\"country_iso3166\":\"AU\",\"zip\":\"00000\",\"magic\":\"8\",\"wmo\":\"94120\",\"latitude\":\"-12.370000\",\"longitude\":\"130.860000\",\"elevation\":\"14.9\"},\"observation_location\":{\"full\":\"Halkitis Court, Nightcliff, NT\",\"city\":\"Halkitis Court, Nightcliff\",\"state\":\"NT\",\"country\":\"AU\",\"country_iso3166\":\"AU\",\"latitude\":\"-12.391690\",\"longitude\":\"130.850708\",\"elevation\":\"26 ft\"},\"estimated\":{},\"station_id\":\"INTNIGHT2\",\"observation_time\":\"Last Updated on March 18, 1:16 PM ACST\",\"observation_time_rfc822\":\"Sat, 18 Mar 2017 13:16:37 +0930\",\"observation_epoch\":\"1489808797\",\"local_time_rfc822\":\"Sat, 18 Mar 2017 13:24:52 +0930\",\"local_epoch\":\"1489809292\",\"local_tz_short\":\"ACST\",\"local_tz_long\":\"Australia/Darwin\",\"local_tz_offset\":\"+0930\",\"weather\":\"Scattered Clouds\",\"temperature_string\":\"86.7 F (30.4 C)\",\"temp_f\":86.7,\"temp_c\":30.4,\"relative_humidity\":\"79%\",\"wind_string\":\"From the NNE at 3.1 MPH Gusting to 6.2 MPH\",\"wind_dir\":\"NNE\",\"wind_degrees\":19,\"wind_mph\":3.1,\"wind_gust_mph\":\"6.2\",\"wind_kph\":5,\"wind_gust_kph\":\"10.0\",\"pressure_mb\":\"1008\",\"pressure_in\":\"29.77\",\"pressure_trend\":\"0\",\"dewpoint_string\":\"80 F (26 C)\",\"dewpoint_f\":80,\"dewpoint_c\":26,\"heat_index_string\":\"101 F (39 C)\",\"heat_index_f\":101,\"heat_index_c\":39,\"windchill_string\":\"NA\",\"windchill_f\":\"NA\",\"windchill_c\":\"NA\",\"feelslike_string\":\"101 F (39 C)\",\"feelslike_f\":\"101\",\"feelslike_c\":\"39\",\"visibility_mi\":\"6.2\",\"visibility_km\":\"10.0\",\"solarradiation\":\"--\",\"UV\":\"12\",\"precip_1hr_string\":\"0.02 in ( 1 mm)\",\"precip_1hr_in\":\"0.02\",\"precip_1hr_metric\":\" 1\",\"precip_today_string\":\"0.02 in (1 mm)\",\"precip_today_in\":\"0.02\",\"precip_today_metric\":\"1\",\"icon\":\"partlycloudy\",\"icon_url\":\"http://icons.wxug.com/i/c/k/partlycloudy.gif\",\"forecast_url\":\"http://www.wunderground.com/global/stations/94120.html\",\"history_url\":\"http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=INTNIGHT2\",\"ob_url\":\"http://www.wunderground.com/cgi-bin/findweather/getForecast?query=-12.391690,130.850708\",\"nowcast\":\"\"}}";
     String responseSolarRadiation = "{\"forecasts\":[{\"ghi\":796,\"ghi90\":923,\"ghi10\":605,\"ebh\":430,\"dni\":468,\"dni10\":176,\"dni90\":763,\"dhi\":367,\"air_temp\":30,\"zenith\":22,\"azimuth\":62,\"cloud_opacity\":36,\"period_end\":\"2017-03-18T05:00:00.0000000Z\",\"period\":\"PT30M\"}]}";
+    float solarRadiation, flatRateTariff, minEfficiency, maxEfficiency, minOutput, maxOutput, capacity, cost, minSavings, maxSavings, minReturns, maxReturns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
         final TextView textViewLocation = (TextView) findViewById(R.id.textViewLocation);
         final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.imageViewGeolocate);
         Button buttonMoreWeather = (Button) findViewById(R.id.buttonMoreWeather);
+        Button buttonMoreProjection = (Button) findViewById(R.id.buttonMoreProjection);
 
         loadSuburbs();
         setupButtons();
@@ -70,6 +72,33 @@ public class DashboardActivity extends AppCompatActivity {
 
         final WeatherData closestSuburb = weatherList.getClosestSuburb(latitude, longitude);
 
+        solarRadiation = closestSuburb.getSolarmean();
+        flatRateTariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
+        minEfficiency = sharedPreferences.getFloat("min_efficiency", (float) 0.735851183);
+        maxEfficiency = sharedPreferences.getFloat("max_efficiency", (float) 1.001635544);
+        capacity = sharedPreferences.getFloat("recent_selected_capacity", (float) 4.5);
+        cost = sharedPreferences.getFloat("recent_selected_cost", (float) 5000);
+
+        minOutput = solarRadiation * capacity * minEfficiency;
+        maxOutput = solarRadiation * capacity * maxEfficiency;
+        minSavings = (float) ((float) minOutput * flatRateTariff * 365.25);
+        maxSavings = (float) ((float)maxOutput * flatRateTariff * 365.25);
+        minReturns = cost / maxSavings;
+        maxReturns = cost / minSavings;
+
+        SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+        editor.putFloat("flat_rate_tariff", (float) flatRateTariff);
+        editor.putFloat("min_efficiency", (float) minEfficiency);
+        editor.putFloat("max_efficiency", (float) maxEfficiency);
+        editor.putFloat("recent_selected_capacity", capacity);
+        editor.putFloat("recent_selected_cost", cost);
+        editor.putFloat("minOutput", minOutput);
+        editor.putFloat("maxOutput", maxOutput);
+        editor.putFloat("minSavings", minSavings);
+        editor.putFloat("maxSavings", maxSavings);
+        editor.putFloat("minReturns", minReturns);
+        editor.putFloat("maxReturns", maxReturns);
+        editor.commit();
 
         if (textViewLocation != null) {
             if (closestSuburb != null) {
@@ -161,6 +190,29 @@ public class DashboardActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("weather", closestSuburb);
                     Intent intent = new Intent(DashboardActivity.this, WeatherActivity.class);
+                    intent.putExtra("weather", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        TextView textViewMaxSavings = (TextView) findViewById(R.id.textViewMaxSavings);
+        if(textViewMaxSavings!=null){
+            textViewMaxSavings.setText("$ ".concat(String.valueOf((int) maxSavings)));
+        }
+
+        TextView textViewMinReturns = (TextView) findViewById(R.id.textViewMinReturns);
+        if(textViewMinReturns!=null){
+            textViewMinReturns.setText(String.valueOf((int) minReturns));
+        }
+
+        if(buttonMoreProjection!=null){
+            buttonMoreProjection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("weather", closestSuburb);
+                    Intent intent = new Intent(DashboardActivity.this, ProjectionsActivity.class);
                     intent.putExtra("weather", bundle);
                     startActivity(intent);
                 }
@@ -299,6 +351,33 @@ public class DashboardActivity extends AppCompatActivity {
             editor.putFloat("longitude", (float) loc.getLongitude());
 
             WeatherData closestSuburb = weatherList.getClosestSuburb((float) loc.getLatitude(), (float) loc.getLongitude());
+            solarRadiation = closestSuburb.getSolarmean();
+
+            SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+            flatRateTariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
+            minEfficiency = sharedPreferences.getFloat("min_efficiency", (float) 0.735851183);
+            maxEfficiency = sharedPreferences.getFloat("max_efficiency", (float) 1.001635544);
+            capacity = sharedPreferences.getFloat("recent_selected_capacity", (float) 4.5);
+            cost = sharedPreferences.getFloat("recent_selected_cost", (float) 5000);
+
+            minOutput = solarRadiation * capacity * minEfficiency;
+            maxOutput = solarRadiation * capacity * maxEfficiency;
+            minSavings = (float) ((float) minOutput * flatRateTariff * 365.25);
+            maxSavings = (float) ((float)maxOutput * flatRateTariff * 365.25);
+            minReturns = cost / maxSavings;
+            maxReturns = cost / minSavings;
+
+            editor.putFloat("flat_rate_tariff", (float) flatRateTariff);
+            editor.putFloat("min_efficiency", (float) minEfficiency);
+            editor.putFloat("max_efficiency", (float) maxEfficiency);
+            editor.putFloat("recent_selected_capacity", capacity);
+            editor.putFloat("recent_selected_cost", cost);
+            editor.putFloat("minOutput", minOutput);
+            editor.putFloat("maxOutput", maxOutput);
+            editor.putFloat("minSavings", minSavings);
+            editor.putFloat("maxSavings", maxSavings);
+            editor.putFloat("minReturns", minReturns);
+            editor.putFloat("maxReturns", maxReturns);
 
             editor.putLong("location_last_refresh", (new Date()).getTime());
             editor.putString("post_code", closestSuburb.getPostcode());
