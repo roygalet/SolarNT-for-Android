@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -60,6 +61,9 @@ public class DashboardActivity extends AppCompatActivity {
         final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.imageViewGeolocate);
         Button buttonMoreWeather = (Button) findViewById(R.id.buttonMoreWeather);
         Button buttonMoreProjection = (Button) findViewById(R.id.buttonMoreProjection);
+        Button buttonMoreDusting = (Button) findViewById(R.id.buttonMoreDusting);
+        Button buttonMoreMonitor = (Button) findViewById(R.id.buttonMoreMonitor);
+        Button buttonMoreProviders = (Button) findViewById(R.id.buttonMoreProviders);
 
         loadSuburbs();
         setupButtons();
@@ -77,6 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
         minEfficiency = sharedPreferences.getFloat("min_efficiency", (float) 0.735851183);
         maxEfficiency = sharedPreferences.getFloat("max_efficiency", (float) 1.001635544);
         capacity = sharedPreferences.getFloat("recent_selected_capacity", (float) 4.5);
+        System.out.println("Capacity: " + capacity);
         cost = sharedPreferences.getFloat("recent_selected_cost", (float) 5000);
 
         minOutput = solarRadiation * capacity * minEfficiency;
@@ -86,7 +91,11 @@ public class DashboardActivity extends AppCompatActivity {
         minReturns = cost / maxSavings;
         maxReturns = cost / minSavings;
 
-        SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+        float dusting = sharedPreferences.getFloat("dusting", 0);
+        float powerLoss = sharedPreferences.getFloat("power_loss", 0);
+        float costOfPowerLoss = sharedPreferences.getFloat("cost_of_power_loss", 0);
+
+        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
         editor.putFloat("flat_rate_tariff", (float) flatRateTariff);
         editor.putFloat("min_efficiency", (float) minEfficiency);
         editor.putFloat("max_efficiency", (float) maxEfficiency);
@@ -98,6 +107,7 @@ public class DashboardActivity extends AppCompatActivity {
         editor.putFloat("maxSavings", maxSavings);
         editor.putFloat("minReturns", minReturns);
         editor.putFloat("maxReturns", maxReturns);
+
         editor.commit();
 
         if (textViewLocation != null) {
@@ -138,7 +148,7 @@ public class DashboardActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this, autoText.getText(),Toast.LENGTH_LONG).show();
                 WeatherData weatherData = weatherList.getWeatherDataByDisplayName(autoCompleteTextViewLocation.getText().toString());
                 textViewLocation.setText(weatherData.getPostcode().concat(" ").concat(weatherData.getSuburb()));
-                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                 editor.putFloat("latitude", weatherData.getLatitude());
                 editor.putFloat("longitude", weatherData.getLongitude());
                 editor.putString("post_code", weatherData.getPostcode());
@@ -213,6 +223,57 @@ public class DashboardActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("weather", closestSuburb);
                     Intent intent = new Intent(DashboardActivity.this, ProjectionsActivity.class);
+                    intent.putExtra("weather", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        TextView textViewDusting = (TextView)findViewById(R.id.textViewDusting);
+        if(textViewDusting!=null){
+            System.out.println(dusting);
+            textViewDusting.setText(String.valueOf(BigDecimal.valueOf(Double.valueOf(String.valueOf(dusting))).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue()).concat(" %"));
+        }
+
+        TextView textViewDailyLoss = (TextView)findViewById(R.id.textViewDailyLoss);
+        if(textViewDailyLoss!=null){
+            System.out.println(costOfPowerLoss);
+            textViewDailyLoss.setText("$ ".concat(String.valueOf(BigDecimal.valueOf(costOfPowerLoss).setScale(2, BigDecimal.ROUND_HALF_UP))));
+        }
+
+        if(buttonMoreDusting!=null){
+            buttonMoreDusting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("weather", closestSuburb);
+                    Intent intent = new Intent(DashboardActivity.this, DustingActivity.class);
+                    intent.putExtra("weather", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        if(buttonMoreMonitor!=null){
+            buttonMoreMonitor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("weather", closestSuburb);
+                    Intent intent = new Intent(DashboardActivity.this, OutputsActivity.class);
+                    intent.putExtra("weather", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        if(buttonMoreProviders!=null){
+            buttonMoreProviders.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("weather", closestSuburb);
+                    Intent intent = new Intent(DashboardActivity.this, ProvidersActivity.class);
                     intent.putExtra("weather", bundle);
                     startActivity(intent);
                 }
@@ -349,11 +410,12 @@ public class DashboardActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
             editor.putFloat("latitude", (float) loc.getLatitude());
             editor.putFloat("longitude", (float) loc.getLongitude());
+            editor.commit();
 
             WeatherData closestSuburb = weatherList.getClosestSuburb((float) loc.getLatitude(), (float) loc.getLongitude());
             solarRadiation = closestSuburb.getSolarmean();
 
-            SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
             flatRateTariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
             minEfficiency = sharedPreferences.getFloat("min_efficiency", (float) 0.735851183);
             maxEfficiency = sharedPreferences.getFloat("max_efficiency", (float) 1.001635544);
@@ -408,7 +470,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     public String generateWeatherConditionURL(){
         float latitude, longitude;
-        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
         longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
         System.out.println("http://api.wunderground.com/api/a5d5665e6d63f78c/conditions/q/" + String.valueOf(latitude) + ","+ String.valueOf(longitude) +".json");
@@ -480,7 +542,7 @@ public class DashboardActivity extends AppCompatActivity {
             mainObject = (new JSONObject(weatherCondition)).getJSONObject("current_observation");
             if(mainObject!=null) {
                 responseWeatherCondition = weatherCondition;
-                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                 editor.putString("weather_condition", responseWeatherCondition);
                 editor.putLong("weather_last_refresh", (new Date()).getTime());
                 editor.commit();
@@ -507,7 +569,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     public String generateSolarRadiationURL(){
         float latitude, longitude;
-        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
         longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
         System.out.println("https://api.solcast.com.au/radiation/forecasts?longitude="+ String.valueOf(longitude) +"&latitude=" + String.valueOf(latitude) + "&api_key=f_uSmb6y_aXCua_Wal8UJXKMdDK_JmGi&format=json");
@@ -578,7 +640,7 @@ public class DashboardActivity extends AppCompatActivity {
             mainObject = (new JSONObject(solarRadiation)).getJSONArray("forecasts").getJSONObject(0);
             if(mainObject!=null) {
                 responseSolarRadiation = solarRadiation;
-                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                 editor.putString("solar_radiation", responseSolarRadiation);
                 editor.putLong("solar_last_refresh", (new Date()).getTime());
                 editor.commit();

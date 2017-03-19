@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupPreferences(){
-        if(getSharedPreferences("General", MODE_PRIVATE)==null) {
+        if(getSharedPreferences("SharedPreferences", MODE_PRIVATE)==null) {
             SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
             editor.putBoolean("solar_user", false);
             editor.putBoolean("live_uploader", false);

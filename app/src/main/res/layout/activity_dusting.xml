@@ -1,0 +1,238 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:title = "@string/title_activity_home"
+    tools:context="au.edu.cdu.solarnt.HomeActivity">
+
+
+    <ImageView
+        android:id="@+id/dustImgImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@android:color/transparent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_above="@+id/relativeLayout4"
+        android:layout_below="@+id/relativeLayout3" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="bottom"
+        android:id="@+id/relativeLayout4">
+
+        <ImageButton
+            android:id="@+id/imageButtonCDU"
+            android:layout_width="80dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:foregroundGravity="left"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/logo_cdu_wedge" />
+
+        <ImageButton
+            android:id="@+id/imageButtonCRE"
+            android:layout_width="240dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:foregroundGravity="left"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/logo_cre" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:id="@+id/relativeLayout3">
+
+        <ImageButton
+            android:id="@+id/imageButtonHelp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/icon_help" />
+
+        <ImageButton
+            android:id="@+id/imageButtonSettings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:layout_toStartOf="@+id/imageButtonHelp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/icon_settings" />
+
+        <ImageButton
+            android:id="@+id/imageButtonHome"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="8dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/icon_home" />
+
+        <ImageView
+            android:id="@+id/imageViewLogo"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/imageButtonHome"
+            app:srcCompat="@drawable/logo_solarnt" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relativeLayout4"
+        android:layout_below="@+id/relativeLayout3">
+
+        <LinearLayout
+            android:id="@+id/dustLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dustTextNoImage"
+                android:layout_centerHorizontal="true"
+                android:text="Analysis Complete"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/dustTextPercent"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dustTextNoImage"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="2dp"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="60sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dustTextNoImage"
+                android:layout_centerHorizontal="true"
+                android:text="Estimated surface area covered by dust"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/dustMessage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dustTextNoImage"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="8dp"
+                android:text="A fraction of the Solar Exposure is being blocked by dust resulting to lower than usual power conversion efficiency of the solar PV system.  If this value is significantly high, cleaning may improve system efficiency."
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/dustTextCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/linearLayout2"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="#de271f1f"
+                android:text="* Solar exposure data from Bureau of Meteorology\n** Based on data from Desert Knowledge Australia Solar Centre in Alice Springs NT\n*** Cost based on Jacana Energy $0.2595 per kWh domestic flat rate tariff"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout2">
+
+            <ImageButton
+                android:id="@+id/dustButtonCamera"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@+id/imageButtonHelp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:elevation="8dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/icon_camera" />
+
+            <ImageButton
+                android:id="@+id/dustButtonGallery"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@+id/imageButtonHelp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:elevation="8dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/icon_photo" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

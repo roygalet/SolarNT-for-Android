@@ -31,6 +31,8 @@ public class PVSystem {
     private HashMap monthlyData;
     private HashMap yearlyData;
     private String systemData;
+    private String status;
+    private String statistics;
 
     public PVSystem(String systemData, PVAccountSettings mySettings) {
         String[] fields = systemData.split(",");
@@ -50,6 +52,76 @@ public class PVSystem {
         monthlyData = new HashMap();
         yearlyData = new HashMap();
         this.systemData = systemData;
+    }
+
+    public void setStatus(PVAccountSettings mySettings) {
+        String url = "http://pvoutput.org/service/r2/getstatus.jsp";
+        url = url.concat("?sid=").concat(String.valueOf(mySettings.getSystemID()));
+        url = url.concat("&key=").concat(mySettings.getKey());
+        url = url.concat("&sid1=").concat(String.valueOf(this.systemID));
+        System.out.println(url);
+        try {
+            URL pvURL = new URL(url);
+            URLConnection urlConnection = pvURL.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(pvURL.openStream()));
+
+            String inputLine;
+
+            dailyData.clear();
+            while ((inputLine = bufferedReader.readLine()) != null) {
+                String[] lines = inputLine.split("\n");
+                this.status = lines[0];
+                System.out.println(lines[0]);
+            }
+            bufferedReader.close();
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(PVAccountSettings mySettings) {
+        String url = "http://pvoutput.org/service/r2/getstatistic.jsp";
+        url = url.concat("?sid=").concat(String.valueOf(mySettings.getSystemID()));
+        url = url.concat("&key=").concat(mySettings.getKey());
+        url = url.concat("&sid1=").concat(String.valueOf(this.systemID));
+        System.out.println(url);
+        try {
+            URL pvURL = new URL(url);
+            URLConnection urlConnection = pvURL.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(pvURL.openStream()));
+
+            String inputLine;
+
+            dailyData.clear();
+            while ((inputLine = bufferedReader.readLine()) != null) {
+                String[] lines = inputLine.split("\n");
+                this.statistics = lines[0];
+                System.out.println(lines[0]);
+            }
+            bufferedReader.close();
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void retrieveDailyData(PVAccountSettings mySettings) {

@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-public class Template extends AppCompatActivity {
+public class ProvidersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.template);
+        setContentView(R.layout.activity_providers);
 
         setupButtons();
     }
@@ -24,7 +24,7 @@ public class Template extends AppCompatActivity {
             imageButtonHome.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Template.this, HomeActivity.class));
+                    startActivity(new Intent(ProvidersActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -34,7 +34,7 @@ public class Template extends AppCompatActivity {
             imageViewLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Template.this, HomeActivity.class));
+                    startActivity(new Intent(ProvidersActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -44,7 +44,7 @@ public class Template extends AppCompatActivity {
             imageButtonSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Template.this, SettingsActivity.class));
+                    startActivity(new Intent(ProvidersActivity.this, SettingsActivity.class));
                 }
             });
         }
@@ -55,7 +55,7 @@ public class Template extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Template.this, HelpActivity.class));
+                    startActivity(new Intent(ProvidersActivity.this, HelpActivity.class));
                 }
             });
         }

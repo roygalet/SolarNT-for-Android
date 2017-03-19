@@ -81,37 +81,42 @@ public class PVSystemsCollection {
                 PVSystem currentSystem = new PVSystem(inputLine, mySettings);
                 if (currentSystem.getName().compareToIgnoreCase(mySystemName) == 0) {
                     mySystem = currentSystem;
-                    mySystem.retrieveDailyData(mySettings);
-                    mySystem.retrieveMonthlyData(mySettings);
-                    mySystem.retriveYearlyData(mySettings);
+//                    mySystem.retrieveDailyData(mySettings);
+//                    mySystem.retrieveMonthlyData(mySettings);
+//                    mySystem.retriveYearlyData(mySettings);
+                    mySystem.setStatus(mySettings);
+                    mySystem.setStatistics(mySettings);
+
                 }else{
                     if (latestOnly && !(currentSystem.getLastOutput().compareToIgnoreCase("Today") == 0 || currentSystem.getLastOutput().compareToIgnoreCase("Yesterday") == 0)) {
                         continue;
                     }
+                    currentSystem.setStatus(mySettings);
+                    currentSystem.setStatistics(mySettings);
                     pvSystems.put(currentSystem.getName(), currentSystem);
                 }
             }
 
-            while(pvSystems.size()>maxNumber){
-                PVSystem largest = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[0]);
-                for(int i = 1; i < pvSystems.size(); i++){
-                    PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
-                    Long currentSize = currentSystem.getSize();
-                    currentSize = Math.abs(currentSize-mySystem.getSize());
-                    Long largestSize = Math.abs(largest.getSize()-mySystem.getSize());
-                    if(currentSize > largestSize){
-                        largest = currentSystem;
-                    }
-                }
-                pvSystems.remove(largest.getName());
-            }
+//            while(pvSystems.size()>maxNumber){
+//                PVSystem largest = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[0]);
+//                for(int i = 1; i < pvSystems.size(); i++){
+//                    PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+//                    Long currentSize = currentSystem.getSize();
+//                    currentSize = Math.abs(currentSize-mySystem.getSize());
+//                    Long largestSize = Math.abs(largest.getSize()-mySystem.getSize());
+//                    if(currentSize > largestSize){
+//                        largest = currentSystem;
+//                    }
+//                }
+//                pvSystems.remove(largest.getName());
+//            }
 
-            for(int i=0; i<pvSystems.size(); i++){
-                PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
-                currentSystem.retrieveDailyData(mySettings);
-                currentSystem.retrieveMonthlyData(mySettings);
-                currentSystem.retriveYearlyData(mySettings);
-            }
+//            for(int i=0; i<pvSystems.size(); i++){
+//                PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+//                currentSystem.retrieveDailyData(mySettings);
+//                currentSystem.retrieveMonthlyData(mySettings);
+//                currentSystem.retriveYearlyData(mySettings);
+//            }
 
             bufferedReader.close();
 

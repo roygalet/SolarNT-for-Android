@@ -27,7 +27,7 @@ public class ProjectionsActivity extends AppCompatActivity {
 
         setupButtons();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         flatRateTariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
         minEfficiency = sharedPreferences.getFloat("min_efficiency", (float) 0.735851183);
         maxEfficiency = sharedPreferences.getFloat("max_efficiency", (float) 1.001635544);
@@ -71,6 +71,7 @@ public class ProjectionsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ((TextView)findViewById(R.id.calcCost)).setText(String.valueOf(seekBar.getProgress()));
+                cost = (float)seekBar.getProgress();
                 calculate();
             }
 
@@ -112,7 +113,7 @@ public class ProjectionsActivity extends AppCompatActivity {
             imageViewLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(ProjectionsActivity.this, ProjectionsActivity.class));
+                    startActivity(new Intent(ProjectionsActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -173,7 +174,11 @@ public class ProjectionsActivity extends AppCompatActivity {
     }
 
     private void calculate(){
-
+        float solarExposure = Float.parseFloat(((TextView)findViewById(R.id.calcSolarExposure)).getText().toString());
+        capacity = Float.parseFloat(((TextView)findViewById(R.id.calcCapacity)).getText().toString());
+//        System.out.println("Capacity: "+ capacity);
+        cost = Integer.parseInt(((TextView)findViewById(R.id.calcCost)).getText().toString());
+//        System.out.println("Cost: "+ cost);
         minOutput = solarRadiation * capacity * minEfficiency;
         maxOutput = solarRadiation * capacity * maxEfficiency;
         minSavings = (float) ((float) minOutput * flatRateTariff * 365.25);
@@ -181,7 +186,7 @@ public class ProjectionsActivity extends AppCompatActivity {
         minReturns = cost / maxSavings;
         maxReturns = cost / minSavings;
 
-        SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
         editor.putFloat("flat_rate_tariff", (float) flatRateTariff);
         editor.putFloat("min_efficiency", (float) minEfficiency);
         editor.putFloat("max_efficiency", (float) maxEfficiency);
@@ -196,6 +201,7 @@ public class ProjectionsActivity extends AppCompatActivity {
 
         editor.commit();
 
+        System.out.println("Capacity:" + getSharedPreferences("SharedPreferences", MODE_PRIVATE).getFloat("recent_selected_capacity",0));
         ((TextView)findViewById(R.id.calcPotentialPower)).setText(String.valueOf(BigDecimal.valueOf(minOutput).setScale(1, BigDecimal.ROUND_HALF_UP)).concat(" - ").concat(String.valueOf(BigDecimal.valueOf(maxOutput).setScale(1, BigDecimal.ROUND_HALF_UP))));
         ((TextView)findViewById(R.id.calcSavings)).setText("$ ".concat(String.valueOf(((Double)Math.floor(minSavings)).intValue())).concat(" - ").concat(String.valueOf(((Double)Math.ceil(maxSavings)).intValue())));
         ((TextView)findViewById(R.id.calcReturns)).setText(String.valueOf(((Double)Math.floor(minReturns)).intValue()).concat(" - ").concat(String.valueOf(((Double)Math.ceil(maxReturns)).intValue())));

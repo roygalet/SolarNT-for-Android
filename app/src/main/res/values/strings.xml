@@ -80,6 +80,8 @@
     <string name="title_activity_dashboard">Dashboard</string>
     <string name="title_activity_weather">Weather</string>
     <string name="title_activity_projections">Projected Savings</string>
+    <string name="title_activity_dusting">Dust Analyzer</string>
+    <string name="title_activity_outputs">Outputs</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
