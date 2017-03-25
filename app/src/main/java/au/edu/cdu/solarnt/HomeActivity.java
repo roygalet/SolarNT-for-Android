@@ -23,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+//        getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit().clear();
         setupButtons();
         setupPreferences();
 
@@ -54,6 +54,10 @@ public class HomeActivity extends AppCompatActivity {
             editor.putFloat("recent_selected_cost", (float) 5000);
 
             editor.putLong("output_last_refresh", (new Date()).getTime());
+            editor.putInt("distance", 25);
+            editor.putBoolean("latest_only", true);
+            editor.putInt("number_of_systems", 1);
+
             editor.commit();
         }
 

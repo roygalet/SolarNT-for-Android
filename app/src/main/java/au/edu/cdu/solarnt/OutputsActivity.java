@@ -14,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import PVOutputData.PVAccountSettings;
 import PVOutputData.PVSystemsCollection;
 import PVOutputData.PVSystem;
+import az.plainpie.PieView;
+import az.plainpie.animation.PieAngleAnimation;
 
 public class OutputsActivity extends AppCompatActivity {
     PVOutputData.PVSystemsCollection nearbyCollection;
@@ -52,11 +55,11 @@ public class OutputsActivity extends AppCompatActivity {
 
         sid = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("sid","47892"));
         key = PreferenceManager.getDefaultSharedPreferences(this).getString("key","4012c804abb523bf7466ef415c9ba808e8aae946");
-        postCode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("postCode","810"));
+        postCode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("post_code","810"));
 //        postCode = 810;
         distance = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("distance","100"));
-        latestOnly = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("latestOnly",true);
-        numberOfSystems = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("numberOfSystems","5"));
+        latestOnly = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("latest_only",true);
+        numberOfSystems = PreferenceManager.getDefaultSharedPreferences(this).getInt("number_of_systems",5);
 
         new PVOutputConnection().execute();
     }
@@ -76,8 +79,8 @@ public class OutputsActivity extends AppCompatActivity {
         @Override
         protected PVSystemsCollection doInBackground(String... params) {
             nearbyCollection = new PVSystemsCollection(new PVAccountSettings(sid, key, postCode));
-            nearbyCollection.getMySystem();
-            nearbyCollection.getNearbySystemsWithLatestOutputs(distance,numberOfSystems, latestOnly);
+//            nearbyCollection.getMySystem();
+            nearbyCollection.getNearbySystemsForNonUsers(postCode, distance, numberOfSystems);
             return nearbyCollection;
         }
 
@@ -86,18 +89,63 @@ public class OutputsActivity extends AppCompatActivity {
             super.onPostExecute(pvSystemsCollection);
 //            systems = new ArrayList<String>();
 //            systems.add(dontCompareMessage);
-            float averageEnergy = 0;
+
             float currentEnergy = 0;
-            for(int i=0; i<nearbyCollection.getPvSystems().size(); i++){
+            float averageEnergy = 0;
+            float currentEfficiency = 0;
+            float averageEfficiency = 0;
+            float maxEnergy = 0;
+            if(nearbyCollection.getPvSystems().size()>0) {
+                for (int i = 0; i < nearbyCollection.getPvSystems().size(); i++) {
 //                systems.add((String) nearbyCollection.getPvSystems().keySet().toArray()[i]);
 //                System.out.println((String) nearbyCollection.getPvSystems().keySet().toArray()[i]);
-//                System.out.println(((PVSystem)nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics());
-                currentEnergy = averageEnergy + Float.parseFloat(((PVSystem)nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[2]);
-                averageEnergy = averageEnergy + Float.parseFloat(((PVSystem)nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics().split(",")[2]);
+                    if(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i]))!=null) {
+                        if (((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus()!=null && ((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics()!=null) {
+                            if(Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[2])>0) {
+                                currentEnergy = currentEnergy + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[2]);
+                            }
+                            if(Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[6])>0) {
+                                currentEfficiency = currentEfficiency + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[6]);
+                            }
+                            averageEnergy = averageEnergy + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics().split(",")[2]);
+                            averageEfficiency = averageEfficiency + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics().split(",")[5]);
+                            maxEnergy = Math.max(maxEnergy,Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics().split(",")[4]));
+                        }
+                    }
+                }
+                currentEnergy = currentEnergy / nearbyCollection.getPvSystems().size();
+                averageEnergy = averageEnergy / nearbyCollection.getPvSystems().size();
+                currentEfficiency = currentEfficiency / nearbyCollection.getPvSystems().size();
+                averageEfficiency = averageEfficiency / nearbyCollection.getPvSystems().size();
             }
-            currentEnergy = currentEnergy/nearbyCollection.getPvSystems().size();
-            averageEnergy = averageEnergy/nearbyCollection.getPvSystems().size();
-            System.out.println(averageEnergy);
+//            System.out.println(averageEnergy);
+            PieView pieViewEnergyGeneration = (PieView) findViewById(R.id.pieViewEnergyGeneration);
+            if(pieViewEnergyGeneration!=null){
+                pieViewEnergyGeneration.setPercentage((float) 1 + (100*(currentEnergy/averageEnergy)));
+                PieAngleAnimation animation = new PieAngleAnimation(pieViewEnergyGeneration);
+                animation.setDuration(1000); //This is the duration of the animation in millis
+                pieViewEnergyGeneration.startAnimation(animation);
+                pieViewEnergyGeneration.setInnerText((new DecimalFormat("0")).format(currentEnergy/1000));
+            }
+
+            TextView textViewMeanEnergyGeneration = (TextView) findViewById(R.id.textViewMeanEnergyGeneration);
+            if(textViewMeanEnergyGeneration!=null){
+                textViewMeanEnergyGeneration.setText((new DecimalFormat("0")).format(averageEnergy/1000).concat(" kWh daily"));
+            }
+
+            PieView pieViewEfficiency = (PieView) findViewById(R.id.pieViewEfficiency);
+            if(pieViewEfficiency!=null){
+                pieViewEfficiency.setPercentage((float) 1 + (100*(currentEfficiency/averageEfficiency)));
+                PieAngleAnimation animation = new PieAngleAnimation(pieViewEfficiency);
+                animation.setDuration(1000); //This is the duration of the animation in millis
+                pieViewEfficiency.startAnimation(animation);
+                pieViewEfficiency.setInnerText((new DecimalFormat("0.#")).format(currentEfficiency));
+            }
+
+            TextView textViewMeanEfficiency = (TextView) findViewById(R.id.textViewMeanEfficiency);
+            if(textViewMeanEfficiency!=null){
+                textViewMeanEfficiency.setText((new DecimalFormat("0.#")).format(averageEfficiency).concat(" kWh/kW daily"));
+            }
 //            ArrayAdapter<String> adapter = new ArrayAdapter <String> (OutputsActivity.this,R.layout.spinner_item, systems);
 //            spinSystems.setAdapter(adapter);
 //            currentFrequency = DAILY;

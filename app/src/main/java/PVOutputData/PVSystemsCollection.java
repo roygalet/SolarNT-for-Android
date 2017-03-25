@@ -1,5 +1,6 @@
 package PVOutputData;
 
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -91,32 +92,95 @@ public class PVSystemsCollection {
                     if (latestOnly && !(currentSystem.getLastOutput().compareToIgnoreCase("Today") == 0 || currentSystem.getLastOutput().compareToIgnoreCase("Yesterday") == 0)) {
                         continue;
                     }
-                    currentSystem.setStatus(mySettings);
-                    currentSystem.setStatistics(mySettings);
+//                    currentSystem.setStatus(mySettings);
+//                    currentSystem.setStatistics(mySettings);
                     pvSystems.put(currentSystem.getName(), currentSystem);
                 }
             }
 
-//            while(pvSystems.size()>maxNumber){
-//                PVSystem largest = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[0]);
-//                for(int i = 1; i < pvSystems.size(); i++){
-//                    PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
-//                    Long currentSize = currentSystem.getSize();
-//                    currentSize = Math.abs(currentSize-mySystem.getSize());
-//                    Long largestSize = Math.abs(largest.getSize()-mySystem.getSize());
-//                    if(currentSize > largestSize){
-//                        largest = currentSystem;
-//                    }
-//                }
-//                pvSystems.remove(largest.getName());
-//            }
+            while(pvSystems.size()>maxNumber){
+                PVSystem largest = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[0]);
+                for(int i = 1; i < pvSystems.size(); i++){
+                    PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+                    Long currentSize = currentSystem.getSize();
+                    currentSize = Math.abs(currentSize-mySystem.getSize());
+                    Long largestSize = Math.abs(largest.getSize()-mySystem.getSize());
+                    if(currentSize > largestSize){
+                        largest = currentSystem;
+                    }
+                }
+                pvSystems.remove(largest.getName());
+            }
 
-//            for(int i=0; i<pvSystems.size(); i++){
-//                PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+            for(int i=0; i<pvSystems.size(); i++){
+                PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+                currentSystem.retrieveDailyData(mySettings);
+                currentSystem.retrieveMonthlyData(mySettings);
+                currentSystem.retriveYearlyData(mySettings);
+            }
+
+            bufferedReader.close();
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            Logger.getLogger(PVSystemsCollection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pvSystems;
+    }
+
+    public HashMap getNearbySystemsForNonUsers(int postCode, int distance, int maxNumber) {
+//        sid = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("sid","47892"));
+//        key = PreferenceManager.getDefaultSharedPreferences(this).getString("key","4012c804abb523bf7466ef415c9ba808e8aae946");
+        PVAccountSettings guestSettings =  new PVAccountSettings(47892, "4012c804abb523bf7466ef415c9ba808e8aae946", postCode);
+        String url = "http://pvoutput.org/service/r2/search.jsp";
+        url = url.concat("?sid=").concat(String.valueOf(guestSettings.getSystemID()));
+        url = url.concat("&key=").concat(guestSettings.getKey());
+        url = url.concat("&q=").concat(String.valueOf(guestSettings.getPostCode())).concat("%20").concat(String.valueOf(distance)).concat("km");
+
+        System.out.println(url);
+        try {
+            URL pvURL = new URL(url);
+            URLConnection urlConnection = pvURL.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(pvURL.openStream()));
+
+            String inputLine;
+            pvSystems.clear();
+            while ((inputLine = bufferedReader.readLine()).trim().length() > 0) {
+            PVSystem currentSystem = new PVSystem(inputLine,guestSettings);
+                if (currentSystem.getLastOutput().compareToIgnoreCase("Today") == 0) {
+                    pvSystems.put(currentSystem.getName(), currentSystem);
+                }
+            }
+
+            System.out.println(pvSystems.size() + " systems found");
+
+            while(pvSystems.size()>maxNumber){
+                PVSystem farthest = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[0]);
+                for(int i = 1; i < pvSystems.size(); i++){
+                    PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+                    Float currentDistance = currentSystem.getDistance();
+                    Float farthestDistance = farthest.getDistance();
+                    if(currentDistance > farthestDistance){
+                        farthest = currentSystem;
+                    }
+                }
+                pvSystems.remove(farthest.getName());
+            }
+            System.out.println(pvSystems.size() + " systems left");
+
+            for(int i=0; i<pvSystems.size(); i++){
+                PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
+                System.out.println(currentSystem.getName());
+                currentSystem.setStatus(guestSettings);
+                currentSystem.setStatistics(guestSettings);
 //                currentSystem.retrieveDailyData(mySettings);
 //                currentSystem.retrieveMonthlyData(mySettings);
 //                currentSystem.retriveYearlyData(mySettings);
-//            }
+            }
 
             bufferedReader.close();
 
