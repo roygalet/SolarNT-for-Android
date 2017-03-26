@@ -2,6 +2,7 @@ package au.edu.cdu.solarnt;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -90,17 +91,27 @@ public class OutputsActivity extends AppCompatActivity {
 //            systems = new ArrayList<String>();
 //            systems.add(dontCompareMessage);
 
+            float averageSize = 0;
+            float currentPower = 0;
+            float averagePower = 0;
             float currentEnergy = 0;
             float averageEnergy = 0;
             float currentEfficiency = 0;
             float averageEfficiency = 0;
             float maxEnergy = 0;
-            if(nearbyCollection.getPvSystems().size()>0) {
-                for (int i = 0; i < nearbyCollection.getPvSystems().size(); i++) {
+
+            int numberOfSystems =nearbyCollection.getPvSystems().size();
+            if(numberOfSystems>0) {
+                for (int i = 0; i < numberOfSystems; i++) {
 //                systems.add((String) nearbyCollection.getPvSystems().keySet().toArray()[i]);
 //                System.out.println((String) nearbyCollection.getPvSystems().keySet().toArray()[i]);
+
                     if(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i]))!=null) {
+                        averageSize = averageSize + ((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getSize();
                         if (((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus()!=null && ((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatistics()!=null) {
+                            if(Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[3])>0) {
+                                currentPower = currentPower + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[3]);
+                            }
                             if(Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[2])>0) {
                                 currentEnergy = currentEnergy + Float.parseFloat(((PVSystem) nearbyCollection.getPvSystems().get((String) nearbyCollection.getPvSystems().keySet().toArray()[i])).getStatus().split(",")[2]);
                             }
@@ -113,12 +124,45 @@ public class OutputsActivity extends AppCompatActivity {
                         }
                     }
                 }
-                currentEnergy = currentEnergy / nearbyCollection.getPvSystems().size();
-                averageEnergy = averageEnergy / nearbyCollection.getPvSystems().size();
-                currentEfficiency = currentEfficiency / nearbyCollection.getPvSystems().size();
-                averageEfficiency = averageEfficiency / nearbyCollection.getPvSystems().size();
+                averageSize = averageSize/numberOfSystems;
+                currentPower = currentPower / numberOfSystems;
+                currentEnergy = currentEnergy / numberOfSystems;
+                averageEnergy = averageEnergy / numberOfSystems;
+                currentEfficiency = currentEfficiency / numberOfSystems;
+                averageEfficiency = averageEfficiency / numberOfSystems;
+                averagePower = currentPower * averageEfficiency / currentEfficiency;
+
+                SharedPreferences.Editor editor = getSharedPreferences("General", MODE_PRIVATE).edit();
+                editor.putFloat("systems_average_size", averageSize);
+                editor.putFloat("systems_current_power", currentPower);
+                editor.putFloat("systems_current_energy", currentEnergy);
+                editor.putFloat("systems_average_energy", averageEnergy);
+                editor.putFloat("systems_current_efficiency", currentEfficiency);
+                editor.putFloat("systems_average_efficiency", averageEfficiency);
+                editor.putFloat("systems_average_power", averagePower);
+                editor.commit();
             }
 //            System.out.println(averageEnergy);
+
+            PieView pieViewPowerGeneration = (PieView) findViewById(R.id.pieViewPowerGeneration);
+            if(pieViewPowerGeneration!=null){
+                pieViewPowerGeneration.setPercentage((float) 1 + (100*(currentPower/averagePower)));
+                PieAngleAnimation animation = new PieAngleAnimation(pieViewPowerGeneration);
+                animation.setDuration(1000); //This is the duration of the animation in millis
+                pieViewPowerGeneration.startAnimation(animation);
+                pieViewPowerGeneration.setInnerText((new DecimalFormat("0.#")).format(currentPower/1000));
+            }
+
+            TextView textViewMeanPowerGeneration = (TextView) findViewById(R.id.textViewMeanPowerGeneration);
+            if(textViewMeanPowerGeneration!=null){
+                textViewMeanPowerGeneration.setText((new DecimalFormat("0.#")).format(averagePower/1000).concat(" kW"));
+            }
+
+            TextView textViewNumberOfSystems = (TextView) findViewById(R.id.textViewNumberOfSystems);
+            if(textViewNumberOfSystems!=null){
+                textViewNumberOfSystems.setText((new DecimalFormat("0")).format(nearbyCollection.getPvSystems().size()).concat(" nearby systems with average capacity of ").concat((new DecimalFormat("0.#")).format(averageSize/1000)).concat(" kW"));
+            }
+
             PieView pieViewEnergyGeneration = (PieView) findViewById(R.id.pieViewEnergyGeneration);
             if(pieViewEnergyGeneration!=null){
                 pieViewEnergyGeneration.setPercentage((float) 1 + (100*(currentEnergy/averageEnergy)));
@@ -144,7 +188,7 @@ public class OutputsActivity extends AppCompatActivity {
 
             TextView textViewMeanEfficiency = (TextView) findViewById(R.id.textViewMeanEfficiency);
             if(textViewMeanEfficiency!=null){
-                textViewMeanEfficiency.setText((new DecimalFormat("0.#")).format(averageEfficiency).concat(" kWh/kW daily"));
+                textViewMeanEfficiency.setText((new DecimalFormat("0.#")).format(averageEfficiency).concat(" kWh/kW"));
             }
 //            ArrayAdapter<String> adapter = new ArrayAdapter <String> (OutputsActivity.this,R.layout.spinner_item, systems);
 //            spinSystems.setAdapter(adapter);
