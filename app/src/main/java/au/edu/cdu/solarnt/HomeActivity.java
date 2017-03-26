@@ -141,7 +141,11 @@ public class HomeActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(HomeActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "home");
+                    Intent intent = new Intent(HomeActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }

@@ -253,7 +253,11 @@ public class DustingActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(DustingActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "dusting");
+                    Intent intent = new Intent(DustingActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }

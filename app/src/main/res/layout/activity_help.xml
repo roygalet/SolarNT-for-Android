@@ -35,7 +35,45 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_help" />
+    <include
+        android:id="@+id/includeHome"
+        layout="@layout/help_home"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeDashboard"
+        layout="@layout/help_dashboard"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeDusting"
+        layout="@layout/help_dusting"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeCompare"
+        layout="@layout/help_compare"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeOutputs"
+        layout="@layout/help_outputs"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeProjections"
+        layout="@layout/help_projections"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeProviders"
+        layout="@layout/help_providers"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/includeWeather"
+        layout="@layout/help_weather"
+        android:visibility="invisible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

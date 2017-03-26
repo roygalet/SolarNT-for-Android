@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:title = "@string/title_activity_home"
-    tools:context="au.edu.cdu.solarnt.ProvidersActivity">
+    tools:context="au.edu.cdu.solarnt.HomeActivity">
 
 
     <RelativeLayout

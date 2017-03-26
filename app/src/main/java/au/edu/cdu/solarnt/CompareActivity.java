@@ -380,7 +380,11 @@ public class CompareActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(CompareActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "compare");
+                    Intent intent = new Intent(CompareActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }

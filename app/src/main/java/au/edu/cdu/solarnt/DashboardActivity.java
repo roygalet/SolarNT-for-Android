@@ -364,7 +364,11 @@ public class DashboardActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(DashboardActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "dashboard");
+                    Intent intent = new Intent(DashboardActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }

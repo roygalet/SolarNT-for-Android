@@ -134,7 +134,11 @@ public class ProjectionsActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(ProjectionsActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "projections");
+                    Intent intent = new Intent(ProjectionsActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }

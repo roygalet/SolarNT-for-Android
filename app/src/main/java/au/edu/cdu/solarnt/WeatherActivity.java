@@ -51,7 +51,7 @@ public class WeatherActivity extends AppCompatActivity {
                     if(pieViewTemperature!=null){
                         float interval = (weatherData.getTempmaxmean()-weatherData.getTempminmean())/2;
                         float minTemperature = weatherData.getTempminmean() - interval;
-                        pieViewTemperature.setPercentage((float) (100*(currentTemperature-minTemperature)/(4*interval)));
+                        pieViewTemperature.setPercentage((float) (0.1 + 100*(currentTemperature-minTemperature)/(4*interval)));
                         PieAngleAnimation animation = new PieAngleAnimation(pieViewTemperature);
                         animation.setDuration(1000); //This is the duration of the animation in millis
                         pieViewTemperature.startAnimation(animation);
@@ -66,7 +66,7 @@ public class WeatherActivity extends AppCompatActivity {
                     double currentRainfall = mainObject.getDouble("precip_today_metric");
                     PieView pieViewRainfall = (PieView) findViewById(R.id.pieViewRainfall);
                     if(pieViewRainfall!=null){
-                        pieViewRainfall.setPercentage((float) (100*(currentRainfall)/(2*weatherData.getRainmean())));
+                        pieViewRainfall.setPercentage((float) (0.1 + 100*(currentRainfall)/(2*weatherData.getRainmean())));
                         PieAngleAnimation animation = new PieAngleAnimation(pieViewRainfall);
                         animation.setDuration(1000); //This is the duration of the animation in millis
                         pieViewRainfall.startAnimation(animation);
@@ -167,7 +167,11 @@ public class WeatherActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(WeatherActivity.this, HelpActivity.class));
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "weather");
+                    Intent intent = new Intent(WeatherActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
                 }
             });
         }
