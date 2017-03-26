@@ -88,12 +88,16 @@ public class ProjectionsActivity extends AppCompatActivity {
 
         calculate();
 
-//        ((Button)findViewById(R.id.projectionsButtonProviders)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(ProjectionsActivity.this, ProvidersActivity.class));
-//            }
-//        });
+        Button buttonProviders = (Button) findViewById(R.id.buttonProviders);
+        if(buttonProviders!=null){
+            buttonProviders.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProjectionsActivity.this, ProvidersActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private void setupButtons(){

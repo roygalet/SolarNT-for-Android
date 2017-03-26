@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             editor.putLong("output_last_refresh", (new Date()).getTime());
             editor.putInt("distance", 25);
             editor.putBoolean("latest_only", true);
-            editor.putInt("number_of_systems", 1);
+            editor.putInt("number_of_systems", 3);
 
             editor.commit();
         }
