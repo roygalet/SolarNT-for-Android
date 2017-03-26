@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import Weather.WeatherData;
@@ -68,7 +69,7 @@ public class DashboardActivity extends AppCompatActivity {
         loadSuburbs();
         setupButtons();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         float latitude = sharedPreferences.getFloat("latitude", (float) -12.459);
         float longitude = sharedPreferences.getFloat("longitude", (float) 130.847);
         responseWeatherCondition = sharedPreferences.getString("weather_condition", responseWeatherCondition);
@@ -254,13 +255,45 @@ public class DashboardActivity extends AppCompatActivity {
             });
         }
 
+        TextView textViewAverageGeneration = (TextView)findViewById(R.id.textViewAverageGeneration);
+        if(textViewAverageGeneration!=null){
+            float averageEnergy;
+            float currentEnergy;
+            if(sharedPreferences.getBoolean("live_uploader",false)){
+                averageEnergy = sharedPreferences.getFloat("my_average_energy",1);
+                currentEnergy = sharedPreferences.getFloat("my_current_energy",0);
+            }else{
+                averageEnergy = sharedPreferences.getFloat("systems_average_energy",1);
+                currentEnergy = sharedPreferences.getFloat("systems_current_energy",0);
+            }
+            textViewAverageGeneration.setText((new DecimalFormat("0")).format(currentEnergy/averageEnergy*100).concat(" %"));
+        }
+
+        TextView textViewAverageEfficiency = (TextView)findViewById(R.id.textViewAverageEfficiency);
+        if(textViewAverageEfficiency!=null){
+            float currentEfficiency;
+            if(sharedPreferences.getBoolean("live_uploader",false)){
+                currentEfficiency = sharedPreferences.getFloat("my_current_efficiency",0);
+            }else{
+                currentEfficiency = sharedPreferences.getFloat("systems_current_efficiency",0);
+            }
+
+            textViewAverageEfficiency.setText((new DecimalFormat("0.#")).format(currentEfficiency));
+        }
+
         if(buttonMoreMonitor!=null){
             buttonMoreMonitor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("weather", closestSuburb);
-                    Intent intent = new Intent(DashboardActivity.this, OutputsActivity.class);
+                    Intent intent;
+                    if(sharedPreferences.getBoolean("live_uploader",false)){
+                        intent= new Intent(DashboardActivity.this, CompareActivity.class);
+                    }else{
+                        intent= new Intent(DashboardActivity.this, OutputsActivity.class);
+                    }
                     intent.putExtra("weather", bundle);
                     startActivity(intent);
                 }
@@ -652,6 +685,9 @@ public class DashboardActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        catch (NullPointerException e) {
+                e.printStackTrace();
         }
     }
 }

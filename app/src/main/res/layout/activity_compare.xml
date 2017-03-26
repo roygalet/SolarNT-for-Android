@@ -16,9 +16,106 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewMySystemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="My System"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Average"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewNumberOfSystems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0 nearby systems"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <az.plainpie.PieView
+                android:id="@+id/pieViewMyPowerGeneration"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="8dp"
+                plainpie:inner_pie_padding="10"
+                plainpie:inner_text="0"
+                plainpie:inner_text_visibility="true"
+                plainpie:percentage="75"
+                plainpie:percentage_size="30" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Power Generation"
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textViewMyMeanPowerGeneration"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewMeanPowerGeneration"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="kiloWatts"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
 
             <az.plainpie.PieView
                 android:id="@+id/pieViewPowerGeneration"
@@ -31,35 +128,6 @@
                 plainpie:inner_text_visibility="true"
                 plainpie:percentage="75" />
 
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Average Power Generation"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewMeanPowerGeneration"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="0 W"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewNumberOfSystems"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0 nearby systems found"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -68,7 +136,7 @@
             android:orientation="horizontal">
 
             <az.plainpie.PieView
-                android:id="@+id/pieViewEnergyGeneration"
+                android:id="@+id/pieViewMyEnergyGeneration"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="8dp"
@@ -79,33 +147,135 @@
                 plainpie:percentage="75" />
 
             <LinearLayout
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Average Energy Generation"
+                    android:text="Energy Generation"
+                    android:textAlignment="center"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textViewMeanEnergyGeneration"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="0 Wh"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textViewMyMeanEnergyGeneration"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewMeanEnergyGeneration"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="kiloWatt*hours"
+                    android:textAlignment="center" />
+
             </LinearLayout>
+
+            <az.plainpie.PieView
+                android:id="@+id/pieViewEnergyGeneration"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="8dp"
+                plainpie:inner_pie_padding="10"
+                plainpie:inner_text="0"
+                plainpie:inner_text_visibility="true"
+                plainpie:percentage="75"
+                plainpie:percentage_size="30" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <az.plainpie.PieView
+                android:id="@+id/pieViewMyEfficiency"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="8dp"
+                plainpie:inner_pie_padding="10"
+                plainpie:inner_text="0"
+                plainpie:inner_text_visibility="true"
+                plainpie:percentage="75"
+                plainpie:percentage_size="30" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Efficiency"
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textViewMyMeanEfficiency"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewMeanEfficiency"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:text="0"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="kWh/kW"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
 
             <az.plainpie.PieView
                 android:id="@+id/pieViewEfficiency"
@@ -118,28 +288,6 @@
                 plainpie:inner_text_visibility="true"
                 plainpie:percentage="75" />
 
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Average Efficiency"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textViewMeanEfficiency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="0 kWh/Wh"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

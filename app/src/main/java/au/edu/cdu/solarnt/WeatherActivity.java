@@ -34,7 +34,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     public void populateWeatherInfo(){
-        SharedPreferences sharedPreferences = getSharedPreferences("General", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         String weatherCondition  = sharedPreferences.getString("weather_condition","");
         if(weatherCondition!=""){
             JSONObject mainObject = null;

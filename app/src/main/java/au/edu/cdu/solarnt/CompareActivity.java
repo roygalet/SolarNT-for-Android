@@ -10,28 +10,25 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import PVOutputData.PVAccountSettings;
-import PVOutputData.PVSystemsCollection;
 import PVOutputData.PVSystem;
+import PVOutputData.PVSystemsCollection;
 import az.plainpie.PieView;
 import az.plainpie.animation.PieAngleAnimation;
 
-public class OutputsActivity extends AppCompatActivity {
-    PVOutputData.PVSystemsCollection nearbyCollection;
+public class CompareActivity extends AppCompatActivity {
+    PVSystemsCollection nearbyCollection;
     int sid;
     String key;
     int postCode;
@@ -55,7 +52,7 @@ public class OutputsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_outputs);
+        setContentView(R.layout.activity_compare);
 
         setupButtons();
 
@@ -85,7 +82,7 @@ public class OutputsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(OutputsActivity.this);
+            progressDialog = new ProgressDialog(CompareActivity.this);
             progressDialog.setCancelable(true);
             progressDialog.setMessage("Retrieving Data . . . Please Wait");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -97,7 +94,7 @@ public class OutputsActivity extends AppCompatActivity {
         protected PVSystemsCollection doInBackground(String... params) {
             nearbyCollection = new PVSystemsCollection(new PVAccountSettings(sid, key, postCode));
 //            nearbyCollection.getMySystem();
-            nearbyCollection.getNearbySystemsForNonUsers(postCode, distance, numberOfSystems);
+            nearbyCollection.getNearbySystemsWithLatestOutputs(postCode, distance, true);
             return nearbyCollection;
         }
 
@@ -116,6 +113,15 @@ public class OutputsActivity extends AppCompatActivity {
             float currentEfficiency = 0;
             float averageEfficiency = 0;
             float maxEnergy = 0;
+
+            String mySystemName = "";
+            float mySystemSize = 0;
+            float myCurrentPower = 0;
+            float myAveragePower = 0;
+            float myCurrentEnergy = 0;
+            float myAverageEnergy = 0;
+            float myCurrentEfficiency = 0;
+            float myAverageEfficiency = 0;
 
             int numberOfSystems =nearbyCollection.getPvSystems().size();
             if(numberOfSystems>0) {
@@ -149,7 +155,41 @@ public class OutputsActivity extends AppCompatActivity {
                 averageEfficiency = averageEfficiency / numberOfSystems;
                 averagePower = currentPower * averageEfficiency / currentEfficiency;
 
+                if((PVSystem) nearbyCollection.getMySystem()!=null) {
+                    mySystemName = nearbyCollection.getMySystem().getName();
+                    mySystemSize = nearbyCollection.getMySystem().getSize();
+                    if(nearbyCollection.getMySystem().getStatus()!=null){
+                        if(Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[3])>0) {
+                            myCurrentPower = Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[3]);
+                        }
+                        if(Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[2])>0) {
+                            myCurrentEnergy = Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[2]);
+                        }
+                        if(Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[6])>0) {
+                            myCurrentEfficiency = Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatus().split(",")[6]);
+                        }
+                    }
+                    if(nearbyCollection.getMySystem().getStatistics()!=null){
+                        if(Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatistics().split(",")[2])>0) {
+                            myAverageEnergy = Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatistics().split(",")[2]);
+                        }
+                        if(Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatistics().split(",")[5])>0) {
+                            myAverageEfficiency = Float.parseFloat(((PVSystem) nearbyCollection.getMySystem()).getStatistics().split(",")[5]);
+                        }
+                    }
+                    myAveragePower = averagePower * myAverageEfficiency / averageEfficiency*myAverageEnergy/averageEnergy;
+                }
+
                 SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                editor.putString("my_system_name", mySystemName);
+                editor.putFloat("my_system_size", mySystemSize);
+                editor.putFloat("my_current_power", myCurrentPower);
+                editor.putFloat("my_current_energy", myCurrentEnergy);
+                editor.putFloat("my_average_energy", myAverageEnergy);
+                editor.putFloat("my_current_efficiency", myCurrentEfficiency);
+                editor.putFloat("my_average_efficiency", myAverageEfficiency);
+                editor.putFloat("my_average_power", myAveragePower);
+
                 editor.putFloat("systems_average_size", averageSize);
                 editor.putFloat("systems_current_power", currentPower);
                 editor.putFloat("systems_current_energy", currentEnergy);
@@ -168,6 +208,14 @@ public class OutputsActivity extends AppCompatActivity {
 
     private void updateDisplay(){
         SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences",MODE_PRIVATE);
+        String mySystemName = sharedPreferences.getString("my_system_name","My System");
+        float mysystemSize = sharedPreferences.getFloat("my_system_size",0);
+        float myCurrentPower = sharedPreferences.getFloat("my_current_power",0);
+        float myAveragePower = sharedPreferences.getFloat("my_average_power",0);
+        float myCurrentEnergy = sharedPreferences.getFloat("my_current_energy",0);
+        float myAverageEnergy = sharedPreferences.getFloat("my_average_energy",0);
+        float myCurrentEfficiency = sharedPreferences.getFloat("my_current_efficiency",0);
+        float myAverageEfficiency = sharedPreferences.getFloat("my_average_efficiency",0);
 
         float averageSize = sharedPreferences.getFloat("systems_average_size",0);
         float currentPower = sharedPreferences.getFloat("systems_current_power",0);
@@ -177,6 +225,60 @@ public class OutputsActivity extends AppCompatActivity {
         float currentEfficiency = sharedPreferences.getFloat("systems_current_efficiency",0);
         float averageEfficiency = sharedPreferences.getFloat("systems_average_efficiency",0);
         String lastUpdated = sharedPreferences.getString("systems_last_updated","Not Available");
+
+        TextView textViewMySystemName = (TextView) findViewById(R.id.textViewMySystemName);
+        if(textViewMySystemName!=null){
+            textViewMySystemName.setText(mySystemName.concat("\n").concat((new DecimalFormat("0.#")).format(mysystemSize/1000).concat(" kW")));
+        }
+
+        PieView pieViewMyPowerGeneration = (PieView) findViewById(R.id.pieViewMyPowerGeneration);
+        if(pieViewMyPowerGeneration!=null){
+            pieViewMyPowerGeneration.setPercentage((float) 1 + (100*(myCurrentPower/myAveragePower)));
+            if(pieViewMyPowerGeneration.getPercentage()<=33)pieViewMyPowerGeneration.setPercentageBackgroundColor(Color.RED);
+            if(pieViewMyPowerGeneration.getPercentage()>=67)pieViewMyPowerGeneration.setPercentageBackgroundColor(Color.GREEN);
+            PieAngleAnimation animation = new PieAngleAnimation(pieViewMyPowerGeneration);
+            animation.setDuration(1000); //This is the duration of the animation in millis
+            pieViewMyPowerGeneration.startAnimation(animation);
+            pieViewMyPowerGeneration.setInnerText((new DecimalFormat("0.#")).format(myCurrentPower/1000));
+        }
+
+        TextView textViewMyMeanPowerGeneration = (TextView) findViewById(R.id.textViewMyMeanPowerGeneration);
+        if(textViewMyMeanPowerGeneration!=null){
+            textViewMyMeanPowerGeneration.setText((new DecimalFormat("0.#")).format(myAveragePower/1000));
+        }
+
+        PieView pieViewMyEnergyGeneration = (PieView) findViewById(R.id.pieViewMyEnergyGeneration);
+        if(pieViewMyEnergyGeneration!=null){
+            pieViewMyEnergyGeneration.setPercentage((float) 1 + (100*(myCurrentEnergy/myAverageEnergy)));
+            if(pieViewMyEnergyGeneration.getPercentage()<=33)pieViewMyEnergyGeneration.setPercentageBackgroundColor(Color.RED);
+            if(pieViewMyEnergyGeneration.getPercentage()>=67)pieViewMyEnergyGeneration.setPercentageBackgroundColor(Color.GREEN);
+            PieAngleAnimation animation = new PieAngleAnimation(pieViewMyEnergyGeneration);
+            animation.setDuration(1000); //This is the duration of the animation in millis
+            pieViewMyEnergyGeneration.startAnimation(animation);
+            pieViewMyEnergyGeneration.setInnerText((new DecimalFormat("0")).format(myCurrentEnergy/1000));
+        }
+
+        TextView textViewMyMeanEnergyGeneration = (TextView) findViewById(R.id.textViewMyMeanEnergyGeneration);
+        if(textViewMyMeanEnergyGeneration!=null){
+            textViewMyMeanEnergyGeneration.setText((new DecimalFormat("0")).format(myAverageEnergy/1000));
+        }
+
+        PieView pieViewMyEfficiency = (PieView) findViewById(R.id.pieViewMyEfficiency);
+        if(pieViewMyEfficiency!=null){
+            pieViewMyEfficiency.setPercentage((float) 1 + (100*(myCurrentEfficiency/myAverageEfficiency)));
+            if(pieViewMyEfficiency.getPercentage()<=33)pieViewMyEfficiency.setPercentageBackgroundColor(Color.RED);
+            if(pieViewMyEfficiency.getPercentage()>=67)pieViewMyEfficiency.setPercentageBackgroundColor(Color.GREEN);
+            PieAngleAnimation animation = new PieAngleAnimation(pieViewMyEfficiency);
+            animation.setDuration(1000); //This is the duration of the animation in millis
+            pieViewMyEfficiency.startAnimation(animation);
+            pieViewMyEfficiency.setInnerText((new DecimalFormat("0.#")).format(myCurrentEfficiency));
+        }
+
+        TextView textViewMyMeanEfficiency = (TextView) findViewById(R.id.textViewMyMeanEfficiency);
+        if(textViewMyMeanEfficiency!=null){
+            textViewMyMeanEfficiency.setText((new DecimalFormat("0.#")).format(myAverageEfficiency));
+        }
+
 
 
         PieView pieViewPowerGeneration = (PieView) findViewById(R.id.pieViewPowerGeneration);
@@ -192,12 +294,12 @@ public class OutputsActivity extends AppCompatActivity {
 
         TextView textViewMeanPowerGeneration = (TextView) findViewById(R.id.textViewMeanPowerGeneration);
         if(textViewMeanPowerGeneration!=null){
-            textViewMeanPowerGeneration.setText((new DecimalFormat("0.#")).format(averagePower/1000).concat(" kW"));
+            textViewMeanPowerGeneration.setText((new DecimalFormat("0.#")).format(averagePower/1000));
         }
 
         TextView textViewNumberOfSystems = (TextView) findViewById(R.id.textViewNumberOfSystems);
         if(textViewNumberOfSystems!=null){
-            textViewNumberOfSystems.setText((new DecimalFormat("0")).format(numberOfSystems).concat(" nearby systems with average capacity of ").concat((new DecimalFormat("0.#")).format(averageSize/1000)).concat(" kW"));
+            textViewNumberOfSystems.setText((new DecimalFormat("0")).format(numberOfSystems).concat(" nearby systems \n").concat((new DecimalFormat("0.#")).format(averageSize/1000)).concat(" kW\n average capacity"));
         }
 
         PieView pieViewEnergyGeneration = (PieView) findViewById(R.id.pieViewEnergyGeneration);
@@ -213,7 +315,7 @@ public class OutputsActivity extends AppCompatActivity {
 
         TextView textViewMeanEnergyGeneration = (TextView) findViewById(R.id.textViewMeanEnergyGeneration);
         if(textViewMeanEnergyGeneration!=null){
-            textViewMeanEnergyGeneration.setText((new DecimalFormat("0")).format(averageEnergy/1000).concat(" kWh daily"));
+            textViewMeanEnergyGeneration.setText((new DecimalFormat("0")).format(averageEnergy/1000));
         }
 
         PieView pieViewEfficiency = (PieView) findViewById(R.id.pieViewEfficiency);
@@ -229,7 +331,7 @@ public class OutputsActivity extends AppCompatActivity {
 
         TextView textViewMeanEfficiency = (TextView) findViewById(R.id.textViewMeanEfficiency);
         if(textViewMeanEfficiency!=null){
-            textViewMeanEfficiency.setText((new DecimalFormat("0.#")).format(averageEfficiency).concat(" kWh/kW"));
+            textViewMeanEfficiency.setText((new DecimalFormat("0.#")).format(averageEfficiency));
         }
 
         TextView textViewLastUpdated = (TextView) findViewById(R.id.textViewLastUpdated);
@@ -247,7 +349,7 @@ public class OutputsActivity extends AppCompatActivity {
             imageButtonHome.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(OutputsActivity.this, HomeActivity.class));
+                    startActivity(new Intent(CompareActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -257,7 +359,7 @@ public class OutputsActivity extends AppCompatActivity {
             imageViewLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(OutputsActivity.this, HomeActivity.class));
+                    startActivity(new Intent(CompareActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -267,7 +369,7 @@ public class OutputsActivity extends AppCompatActivity {
             imageButtonSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(OutputsActivity.this, SettingsActivity.class));
+                    startActivity(new Intent(CompareActivity.this, SettingsActivity.class));
                 }
             });
         }
@@ -278,7 +380,7 @@ public class OutputsActivity extends AppCompatActivity {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(OutputsActivity.this, HelpActivity.class));
+                    startActivity(new Intent(CompareActivity.this, HelpActivity.class));
                 }
             });
         }

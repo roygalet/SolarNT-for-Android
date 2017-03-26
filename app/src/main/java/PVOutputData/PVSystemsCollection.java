@@ -85,7 +85,7 @@ public class PVSystemsCollection {
 //                    mySystem.retrieveDailyData(mySettings);
 //                    mySystem.retrieveMonthlyData(mySettings);
 //                    mySystem.retriveYearlyData(mySettings);
-                    mySystem.setStatus(mySettings);
+                    if(mySystem.getLastOutput().compareToIgnoreCase("Today") == 0)mySystem.setStatus(mySettings);
                     mySystem.setStatistics(mySettings);
 
                 }else{
@@ -114,9 +114,8 @@ public class PVSystemsCollection {
 
             for(int i=0; i<pvSystems.size(); i++){
                 PVSystem currentSystem = (PVSystem) pvSystems.get(pvSystems.keySet().toArray()[i]);
-                currentSystem.retrieveDailyData(mySettings);
-                currentSystem.retrieveMonthlyData(mySettings);
-                currentSystem.retriveYearlyData(mySettings);
+                currentSystem.setStatus(mySettings);
+                currentSystem.setStatistics(mySettings);
             }
 
             bufferedReader.close();
