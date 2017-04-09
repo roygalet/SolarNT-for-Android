@@ -56,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             editor.putLong("output_last_refresh", (new Date()).getTime());
             editor.putInt("distance", 25);
             editor.putBoolean("latest_only", true);
+            editor.putBoolean("auto_refresh", true);
             editor.putInt("number_of_systems", 3);
 
             editor.commit();
@@ -108,8 +109,8 @@ public class HomeActivity extends AppCompatActivity {
             });
 
             SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-            Boolean solarUser = sharedPreferences.getBoolean("solar_user", false);
-            switchSolarUser.setChecked(solarUser);
+            Boolean liveUploader = sharedPreferences.getBoolean("live_uploader", false);
+            switchLiveUploader.setChecked(liveUploader);
         }
     }
 

@@ -32,7 +32,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,7 @@ import Weather.WeatherList;
 
 public class SettingsActivity extends AppCompatActivity {
     WeatherList weatherList;
+    WeatherData weatherData;
     String[] suburbs;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -57,6 +63,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+
+        SharedPreferences sharedPreferences = getSharedPreferences("SharePreferences", MODE_PRIVATE);
+
         final AutoCompleteTextView autoCompleteTextViewLocation = (AutoCompleteTextView)findViewById(R.id.autoCompleteTextViewLocation);
         final ImageView imageViewSearch = (ImageView) findViewById(R.id.imageViewSearch);
         final ImageView imageViewCancel = (ImageView) findViewById(R.id.imageViewCancel);
@@ -64,6 +73,39 @@ public class SettingsActivity extends AppCompatActivity {
         final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.imageViewGeolocate);
 
         loadSuburbs();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, suburbs);
+
+        if(autoCompleteTextViewLocation!=null){
+
+                autoCompleteTextViewLocation.setText(sharedPreferences.getString("post_code", "0800").concat(" ").concat(sharedPreferences.getString("suburb", "Darwin")));
+
+
+            autoCompleteTextViewLocation.setAdapter(adapter);
+            autoCompleteTextViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(MainActivity.this, autoText.getText(),Toast.LENGTH_LONG).show();
+                    WeatherData weatherData = weatherList.getWeatherDataByDisplayName(autoCompleteTextViewLocation.getText().toString());
+                    textViewLocation.setText(weatherData.getPostcode().concat(" ").concat(weatherData.getSuburb()));
+                    SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                    editor.putFloat("latitude", weatherData.getLatitude());
+                    editor.putFloat("longitude", weatherData.getLongitude());
+                    editor.putString("post_code", weatherData.getPostcode());
+                    editor.putString("suburb", weatherData.getSuburb());
+                    editor.commit();
+                    textViewLocation.setVisibility(View.VISIBLE);
+                    imageViewSearch.setVisibility(View.VISIBLE);
+                    imageViewGeolocate.setVisibility(View.VISIBLE);
+                    imageViewCancel.setVisibility(View.GONE);
+                    autoCompleteTextViewLocation.setVisibility(View.GONE);
+                }
+            });
+        }
+
+
+
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new SettingsActivity.MyLocationListener();
@@ -78,7 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
             System.out.println("Failed to get location");
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, locationListener);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, locationListener);
 
         if (imageViewGeolocate != null) {
             imageViewGeolocate.setOnClickListener(new View.OnClickListener() {
@@ -89,28 +131,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, suburbs);
-        autoCompleteTextViewLocation.setAdapter(adapter);
-        autoCompleteTextViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(MainActivity.this, autoText.getText(),Toast.LENGTH_LONG).show();
-                WeatherData weatherData = weatherList.getWeatherDataByDisplayName(autoCompleteTextViewLocation.getText().toString());
-                textViewLocation.setText(weatherData.getPostcode().concat(" ").concat(weatherData.getSuburb()));
-                SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-                editor.putFloat("latitude", weatherData.getLatitude());
-                editor.putFloat("longitude", weatherData.getLongitude());
-                editor.putString("post_code", weatherData.getPostcode());
-                editor.putString("suburb", weatherData.getSuburb());
-                editor.commit();
-                textViewLocation.setVisibility(View.VISIBLE);
-                imageViewSearch.setVisibility(View.VISIBLE);
-                imageViewGeolocate.setVisibility(View.VISIBLE);
-                imageViewCancel.setVisibility(View.GONE);
-                autoCompleteTextViewLocation.setVisibility(View.GONE);
-            }
-        });
+
+
+
 
 
         if (imageViewSearch != null){
@@ -142,6 +165,168 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
         }
+
+        Switch switchSolarUser = (Switch) findViewById(R.id.switchSolarUser);
+
+
+        if(switchSolarUser!=null){
+            final Switch switchLiveUploader = (Switch) findViewById(R.id.switchLiveUploader);
+
+            switchSolarUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(switchLiveUploader!=null){
+                        if(isChecked==true){
+                            switchLiveUploader.setVisibility(View.VISIBLE);
+                        }else{
+                            switchLiveUploader.setVisibility(View.GONE);
+                            switchLiveUploader.setChecked(false);
+                        }
+                    }
+                }
+            });
+
+            Boolean solarUser = sharedPreferences.getBoolean("solar_user", false);
+            switchSolarUser.setChecked(solarUser);
+
+            if(switchSolarUser.isChecked() ==true){
+                switchLiveUploader.setVisibility(View.VISIBLE);
+            }else{
+                switchLiveUploader.setVisibility(View.GONE);
+                switchLiveUploader.setChecked(false);
+            }
+        }
+
+        Switch switchLiveUploader = (Switch) findViewById(R.id.switchLiveUploader);
+        if(switchLiveUploader!=null){
+            final LinearLayout settingsPVOutput = (LinearLayout) findViewById(R.id.settingsPVOutput);
+            switchLiveUploader.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if(settingsPVOutput!=null){
+                        if(isChecked==true){
+                            settingsPVOutput.setVisibility(View.VISIBLE);
+                        }else{
+                            settingsPVOutput.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            });
+
+            Boolean liveUploader = sharedPreferences.getBoolean("live_uploader", false);
+            switchLiveUploader.setChecked(liveUploader);
+
+            if(switchLiveUploader.isChecked() ==true){
+                settingsPVOutput.setVisibility(View.VISIBLE);
+            }else{
+                settingsPVOutput.setVisibility(View.GONE);
+            }
+        }
+
+
+        EditText editTextSystemID = (EditText) findViewById(R.id.editTextSystemID);
+        if(editTextSystemID!=null){
+            String systemID = sharedPreferences.getString("sid", "47892");
+            editTextSystemID.setText(systemID);
+        }
+
+        EditText editTextKey = (EditText) findViewById(R.id.editTextKey);
+        if(editTextKey!=null){
+            String key = sharedPreferences.getString("key", "4012c804abb523bf7466ef415c9ba808e8aae946");
+            editTextKey.setText(key);
+        }
+
+
+        Switch switchAutoRefresh = (Switch) findViewById(R.id.switchAutoRefresh);
+        if(switchAutoRefresh!=null){
+            Boolean autoRefresh = sharedPreferences.getBoolean("auto_refresh", false);
+            switchAutoRefresh.setChecked(autoRefresh);
+        }
+
+
+        EditText editTextNumberOfSystems = (EditText) findViewById(R.id.editTextNumberOfSystems);
+        if(editTextNumberOfSystems!=null){
+            String numberOfSystems = sharedPreferences.getString("number_of_systems", "3");
+            editTextNumberOfSystems.setText(numberOfSystems);
+        }
+
+
+        EditText editTextTariff = (EditText) findViewById(R.id.editTextTariff);
+        if(editTextTariff!=null){
+            Float tariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
+            editTextTariff.setText(String.valueOf(tariff));
+        }
+
+
+
+        Switch switchWeatherStation = (Switch) findViewById(R.id.switchWeatherStation);
+        if(switchWeatherStation!=null){
+            switchWeatherStation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Switch switchWeatherUnderground = (Switch) findViewById(R.id.switchWeatherUnderground);
+                    if(switchWeatherUnderground!=null){
+                        if(isChecked==true){
+                            switchWeatherUnderground.setVisibility(View.VISIBLE);
+                        }else{
+                            switchWeatherUnderground.setVisibility(View.GONE);
+                            switchWeatherUnderground.setChecked(false);
+                        }
+                    }
+                }
+            });
+
+            Boolean wunderUser = sharedPreferences.getBoolean("wunder_user", false);
+            switchWeatherStation.setChecked(wunderUser);
+        }
+
+        Switch switchWeatherUnderground = (Switch) findViewById(R.id.switchWeatherUnderground);
+        if(switchWeatherUnderground!=null){
+            switchWeatherUnderground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    LinearLayout settingsWeatherUnderground = (LinearLayout) findViewById(R.id.settingsWeatherUnderground);
+                    if(settingsWeatherUnderground!=null){
+                        if(isChecked==true){
+                            settingsWeatherUnderground.setVisibility(View.VISIBLE);
+                        }else{
+                            settingsWeatherUnderground.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            });
+            Boolean wunderUploader = sharedPreferences.getBoolean("wunder_uploader", false);
+            switchWeatherStation.setChecked(wunderUploader);
+        }
+
+
+        EditText editTextWeatherKey = (EditText) findViewById(R.id.editTextWeatherKey);
+        if(editTextWeatherKey!=null){
+            String key = sharedPreferences.getString("wunder_key", "a5d5665e6d63f78c");
+            editTextWeatherKey.setText(String.valueOf(key));
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences",MODE_PRIVATE).edit();
+        editor.putBoolean("solar_user",((Switch)findViewById(R.id.switchSolarUser)).isChecked());
+        editor.putBoolean("live_uploader",((Switch)findViewById(R.id.switchLiveUploader)).isChecked());
+        editor.putString("sid",((EditText)findViewById(R.id.editTextSystemID)).getText().toString());
+        editor.putString("key",((EditText)findViewById(R.id.editTextKey)).getText().toString());
+        editor.putBoolean("auto_refresh",((Switch)findViewById(R.id.switchAutoRefresh)).isChecked());
+        editor.putInt("number_of_systems", Integer.parseInt(((EditText)findViewById(R.id.editTextNumberOfSystems)).getText().toString()));
+        editor.putFloat("flat_rate_tariff", Float.parseFloat(((EditText)findViewById(R.id.editTextTariff)).getText().toString()));
+        editor.putBoolean("wunder_user",((Switch)findViewById(R.id.switchWeatherStation)).isChecked());
+        editor.putBoolean("wunder_uploader",((Switch)findViewById(R.id.switchWeatherUnderground)).isChecked());
+        editor.putString("wunder_key",((EditText)findViewById(R.id.editTextWeatherKey)).getText().toString());
+        editor.commit();
+
     }
 
     private void loadSuburbs(){
@@ -189,6 +374,82 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+
+    private void setupButtons(){
+
+        ImageButton imageButtonHome = (ImageButton)findViewById(R.id.imageButtonHome);
+        if(imageButtonHome != null){
+            imageButtonHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(SettingsActivity.this, HomeActivity.class));
+                }
+            });
+        }
+
+        ImageView imageViewLogo = (ImageView) findViewById(R.id.imageViewLogo);
+        if(imageViewLogo != null){
+            imageViewLogo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(SettingsActivity.this, HomeActivity.class));
+                }
+            });
+        }
+//
+//        ImageButton imageButtonSettings = (ImageButton)findViewById(R.id.imageButtonSettings);
+//        if(imageButtonSettings != null){
+//            imageButtonSettings.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
+//                }
+//            });
+//        }
+
+
+        ImageButton imageButtonHelp = (ImageButton)findViewById(R.id.imageButtonHelp);
+        if(imageButtonHelp != null) {
+            imageButtonHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("context", "dusting");
+                    Intent intent = new Intent(SettingsActivity.this, HelpActivity.class);
+                    intent.putExtra("extras", bundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        ImageButton imageButtonCDU = (ImageButton)findViewById(R.id.imageButtonCDU);
+        if(imageButtonCDU != null) {
+            imageButtonCDU.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setData(Uri.parse("http://www.cdu.edu.au"));
+                    startActivity(intent);
+                }
+            });
+        }
+
+        ImageButton imageButtonCRE = (ImageButton)findViewById(R.id.imageButtonCRE);
+        if(imageButtonCRE != null) {
+            imageButtonCRE.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setData(Uri.parse("http://www.cdu.edu.au/cre"));
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
 }

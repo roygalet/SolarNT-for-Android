@@ -177,7 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Compare Settings"
+                android:text="Energy Generation Settings"
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 
@@ -203,7 +203,7 @@
                     android:text="Number of nearby systems to compare:" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editTextNumberOfSystems"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -239,7 +239,7 @@
                     android:text="Cost per KiloWatt*hour (AU$): " />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editTextTariff"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.68"
@@ -338,6 +338,7 @@
             android:textOn="Y" />
 
         <LinearLayout
+            android:id="@+id/settingsWeatherUnderground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -362,7 +363,7 @@
                     android:text="API Key: " />
 
                 <EditText
-                    android:id="@+id/editTextKey"
+                    android:id="@+id/editTextWeatherKey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

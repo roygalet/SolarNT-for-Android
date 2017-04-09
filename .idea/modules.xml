@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SolarNT-for-Android.iml" filepath="$PROJECT_DIR$/SolarNT-for-Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SolarNT-for-Android-2017-04-01.iml" filepath="$PROJECT_DIR$/SolarNT-for-Android-2017-04-01.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
