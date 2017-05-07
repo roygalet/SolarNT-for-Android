@@ -82,7 +82,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-
+        if (textViewLocation != null) {
+            textViewLocation.setText(sharedPreferences.getString("post_code", "0800").concat(" ").concat(sharedPreferences.getString("suburb", "Darwin")));
+        }
 
 
 //        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -108,11 +110,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
-
-
 
         if (imageViewSearch != null){
             imageViewSearch.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +255,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             Boolean wunderUser = sharedPreferences.getBoolean("wunder_user", false);
             switchWeatherStation.setChecked(wunderUser);
+
+            Switch switchWeatherUnderground = (Switch) findViewById(R.id.settingsSwitchWeatherUnderground);
+            if(switchWeatherUnderground!=null){
+                if(switchWeatherStation.isChecked()==true){
+                    switchWeatherUnderground.setVisibility(View.VISIBLE);
+                }else{
+                    switchWeatherUnderground.setVisibility(View.GONE);
+                    switchWeatherUnderground.setChecked(false);
+                }
+            }
         }
 
         Switch switchWeatherUnderground = (Switch) findViewById(R.id.settingsSwitchWeatherUnderground);
@@ -277,7 +284,16 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
             Boolean wunderUploader = sharedPreferences.getBoolean("wunder_uploader", false);
-            switchWeatherStation.setChecked(wunderUploader);
+            switchWeatherUnderground.setChecked(wunderUploader);
+
+            LinearLayout settingsWeatherUnderground = (LinearLayout) findViewById(R.id.settingsWeatherUnderground);
+            if(settingsWeatherUnderground!=null){
+                if(switchWeatherUnderground.isChecked()==true){
+                    settingsWeatherUnderground.setVisibility(View.VISIBLE);
+                }else{
+                    settingsWeatherUnderground.setVisibility(View.GONE);
+                }
+            }
         }
 
 
