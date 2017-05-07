@@ -25,7 +25,9 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
 
         Bundle bundle = getIntent().getExtras();
-        weatherData = bundle.getBundle("weather").getParcelable("weather");
+        if(bundle != null) {
+            weatherData = bundle.getBundle("weather").getParcelable("weather");
+        }
 
         setupButtons();
         if(weatherData!=null) {
@@ -136,7 +138,7 @@ public class WeatherActivity extends AppCompatActivity {
             imageButtonHome.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(WeatherActivity.this, WeatherActivity.class));
+                    startActivity(new Intent(WeatherActivity.this, HomeActivity.class));
                 }
             });
         }
@@ -146,7 +148,7 @@ public class WeatherActivity extends AppCompatActivity {
             imageViewLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(WeatherActivity.this, WeatherActivity.class));
+                    startActivity(new Intent(WeatherActivity.this, HomeActivity.class));
                 }
             });
         }

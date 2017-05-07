@@ -1,33 +1,14 @@
 package au.edu.cdu.solarnt;
 
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,13 +20,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.List;
 
 import Weather.WeatherData;
 import Weather.WeatherList;
@@ -62,32 +40,32 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        setupButtons();
 
+        SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("SharePreferences", MODE_PRIVATE);
-
-        final AutoCompleteTextView autoCompleteTextViewLocation = (AutoCompleteTextView)findViewById(R.id.autoCompleteTextViewLocation);
-        final ImageView imageViewSearch = (ImageView) findViewById(R.id.imageViewSearch);
-        final ImageView imageViewCancel = (ImageView) findViewById(R.id.imageViewCancel);
-        final TextView textViewLocation = (TextView) findViewById(R.id.textViewLocation);
-        final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.imageViewGeolocate);
+        final AutoCompleteTextView settingsAutoCompleteTextViewLocation = (AutoCompleteTextView)findViewById(R.id.settingsAutoCompleteTextViewLocation);
+        final ImageView imageViewSearch = (ImageView) findViewById(R.id.settingsImageViewSearch);
+        final ImageView imageViewCancel = (ImageView) findViewById(R.id.settingsImageViewCancel);
+        final TextView textViewLocation = (TextView) findViewById(R.id.settingsTextViewLocation);
+        final ImageView imageViewGeolocate = (ImageView) findViewById(R.id.settingsImageViewGeolocate);
 
         loadSuburbs();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, suburbs);
 
-        if(autoCompleteTextViewLocation!=null){
+        if(settingsAutoCompleteTextViewLocation!=null){
 
-                autoCompleteTextViewLocation.setText(sharedPreferences.getString("post_code", "0800").concat(" ").concat(sharedPreferences.getString("suburb", "Darwin")));
+            settingsAutoCompleteTextViewLocation.setText(sharedPreferences.getString("post_code", "0800").concat(" ").concat(sharedPreferences.getString("suburb", "Darwin")));
 
 
-            autoCompleteTextViewLocation.setAdapter(adapter);
-            autoCompleteTextViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            settingsAutoCompleteTextViewLocation.setAdapter(adapter);
+            settingsAutoCompleteTextViewLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                Toast.makeText(MainActivity.this, autoText.getText(),Toast.LENGTH_LONG).show();
-                    WeatherData weatherData = weatherList.getWeatherDataByDisplayName(autoCompleteTextViewLocation.getText().toString());
+                    WeatherData weatherData = weatherList.getWeatherDataByDisplayName(settingsAutoCompleteTextViewLocation.getText().toString());
                     textViewLocation.setText(weatherData.getPostcode().concat(" ").concat(weatherData.getSuburb()));
                     SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                     editor.putFloat("latitude", weatherData.getLatitude());
@@ -99,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
                     imageViewSearch.setVisibility(View.VISIBLE);
                     imageViewGeolocate.setVisibility(View.VISIBLE);
                     imageViewCancel.setVisibility(View.GONE);
-                    autoCompleteTextViewLocation.setVisibility(View.GONE);
+                    settingsAutoCompleteTextViewLocation.setVisibility(View.GONE);
                 }
             });
         }
@@ -107,19 +85,19 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new SettingsActivity.MyLocationListener();
-        if (ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            System.out.println("Failed to get location");
-            return;
-        }
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        locationListener = new SettingsActivity.MyLocationListener();
+//        if (ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            System.out.println("Failed to get location");
+//            return;
+//        }
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, locationListener);
 
         if (imageViewGeolocate != null) {
@@ -140,13 +118,13 @@ public class SettingsActivity extends AppCompatActivity {
             imageViewSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(imageViewGeolocate!=null && autoCompleteTextViewLocation!=null) {
+                    if(imageViewGeolocate!=null && settingsAutoCompleteTextViewLocation!=null) {
                         textViewLocation.setVisibility(View.GONE);
                         imageViewSearch.setVisibility(View.GONE);
                         imageViewGeolocate.setVisibility(View.GONE);
                         imageViewCancel.setVisibility(View.VISIBLE);
-                        autoCompleteTextViewLocation.setVisibility(View.VISIBLE);
-                        autoCompleteTextViewLocation.setText("");
+                        settingsAutoCompleteTextViewLocation.setVisibility(View.VISIBLE);
+                        settingsAutoCompleteTextViewLocation.setText("");
                     }
                 }
             });
@@ -160,48 +138,47 @@ public class SettingsActivity extends AppCompatActivity {
                     imageViewSearch.setVisibility(View.VISIBLE);
                     imageViewGeolocate.setVisibility(View.VISIBLE);
                     imageViewCancel.setVisibility(View.GONE);
-                    autoCompleteTextViewLocation.setVisibility(View.GONE);
+                    settingsAutoCompleteTextViewLocation.setVisibility(View.GONE);
                 }
             });
 
         }
 
-        Switch switchSolarUser = (Switch) findViewById(R.id.switchSolarUser);
+        Switch settingsSwitchSolarUser = (Switch) findViewById(R.id.settingsSwitchSolarUser);
+        System.out.println(settingsSwitchSolarUser);
+        if(settingsSwitchSolarUser!=null){
 
-
-        if(switchSolarUser!=null){
-            final Switch switchLiveUploader = (Switch) findViewById(R.id.switchLiveUploader);
-
-            switchSolarUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            final Switch settingsSwitchLiveUploader = (Switch) findViewById(R.id.settingsSwitchLiveUploader);
+            settingsSwitchSolarUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if(switchLiveUploader!=null){
+                    if(settingsSwitchLiveUploader!=null){
                         if(isChecked==true){
-                            switchLiveUploader.setVisibility(View.VISIBLE);
+                            settingsSwitchLiveUploader.setVisibility(View.VISIBLE);
                         }else{
-                            switchLiveUploader.setVisibility(View.GONE);
-                            switchLiveUploader.setChecked(false);
+                            settingsSwitchLiveUploader.setVisibility(View.GONE);
+                            settingsSwitchLiveUploader.setChecked(false);
                         }
                     }
                 }
             });
 
             Boolean solarUser = sharedPreferences.getBoolean("solar_user", false);
-            switchSolarUser.setChecked(solarUser);
+            settingsSwitchSolarUser.setChecked(solarUser);
 
-            if(switchSolarUser.isChecked() ==true){
-                switchLiveUploader.setVisibility(View.VISIBLE);
+            if(settingsSwitchSolarUser.isChecked() ==true){
+                settingsSwitchLiveUploader.setVisibility(View.VISIBLE);
             }else{
-                switchLiveUploader.setVisibility(View.GONE);
-                switchLiveUploader.setChecked(false);
+                settingsSwitchLiveUploader.setVisibility(View.GONE);
+                settingsSwitchLiveUploader.setChecked(false);
             }
         }
 
-        Switch switchLiveUploader = (Switch) findViewById(R.id.switchLiveUploader);
-        if(switchLiveUploader!=null){
+        Switch settingsSwitchLiveUploader = (Switch) findViewById(R.id.settingsSwitchLiveUploader);
+        if(settingsSwitchLiveUploader!=null){
             final LinearLayout settingsPVOutput = (LinearLayout) findViewById(R.id.settingsPVOutput);
-            switchLiveUploader.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            settingsSwitchLiveUploader.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -217,9 +194,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             Boolean liveUploader = sharedPreferences.getBoolean("live_uploader", false);
-            switchLiveUploader.setChecked(liveUploader);
+            settingsSwitchLiveUploader.setChecked(liveUploader);
 
-            if(switchLiveUploader.isChecked() ==true){
+            if(settingsSwitchLiveUploader.isChecked() ==true){
                 settingsPVOutput.setVisibility(View.VISIBLE);
             }else{
                 settingsPVOutput.setVisibility(View.GONE);
@@ -227,34 +204,34 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
 
-        EditText editTextSystemID = (EditText) findViewById(R.id.editTextSystemID);
+        EditText editTextSystemID = (EditText) findViewById(R.id.settingsEditTextPVOutputSystemID);
         if(editTextSystemID!=null){
             String systemID = sharedPreferences.getString("sid", "47892");
             editTextSystemID.setText(systemID);
         }
 
-        EditText editTextKey = (EditText) findViewById(R.id.editTextKey);
+        EditText editTextKey = (EditText) findViewById(R.id.settingsEditTextPVOutputKey);
         if(editTextKey!=null){
             String key = sharedPreferences.getString("key", "4012c804abb523bf7466ef415c9ba808e8aae946");
             editTextKey.setText(key);
         }
 
 
-        Switch switchAutoRefresh = (Switch) findViewById(R.id.switchAutoRefresh);
+        Switch switchAutoRefresh = (Switch) findViewById(R.id.settingsSwitchAutoRefresh);
         if(switchAutoRefresh!=null){
             Boolean autoRefresh = sharedPreferences.getBoolean("auto_refresh", false);
             switchAutoRefresh.setChecked(autoRefresh);
         }
 
 
-        EditText editTextNumberOfSystems = (EditText) findViewById(R.id.editTextNumberOfSystems);
+        EditText editTextNumberOfSystems = (EditText) findViewById(R.id.settingsEditTextNumberOfSystems);
         if(editTextNumberOfSystems!=null){
-            String numberOfSystems = sharedPreferences.getString("number_of_systems", "3");
-            editTextNumberOfSystems.setText(numberOfSystems);
+            int numberOfSystems = sharedPreferences.getInt("number_of_systems", 3);
+            editTextNumberOfSystems.setText(String.valueOf(numberOfSystems));
         }
 
 
-        EditText editTextTariff = (EditText) findViewById(R.id.editTextTariff);
+        EditText editTextTariff = (EditText) findViewById(R.id.settingsEditTextTariff);
         if(editTextTariff!=null){
             Float tariff = sharedPreferences.getFloat("flat_rate_tariff", (float) 0.2595);
             editTextTariff.setText(String.valueOf(tariff));
@@ -262,12 +239,12 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-        Switch switchWeatherStation = (Switch) findViewById(R.id.switchWeatherStation);
+        Switch switchWeatherStation = (Switch) findViewById(R.id.settingsSwitchWeatherStation);
         if(switchWeatherStation!=null){
             switchWeatherStation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Switch switchWeatherUnderground = (Switch) findViewById(R.id.switchWeatherUnderground);
+                    Switch switchWeatherUnderground = (Switch) findViewById(R.id.settingsSwitchWeatherUnderground);
                     if(switchWeatherUnderground!=null){
                         if(isChecked==true){
                             switchWeatherUnderground.setVisibility(View.VISIBLE);
@@ -283,7 +260,7 @@ public class SettingsActivity extends AppCompatActivity {
             switchWeatherStation.setChecked(wunderUser);
         }
 
-        Switch switchWeatherUnderground = (Switch) findViewById(R.id.switchWeatherUnderground);
+        Switch switchWeatherUnderground = (Switch) findViewById(R.id.settingsSwitchWeatherUnderground);
         if(switchWeatherUnderground!=null){
             switchWeatherUnderground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -304,7 +281,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
 
-        EditText editTextWeatherKey = (EditText) findViewById(R.id.editTextWeatherKey);
+        EditText editTextWeatherKey = (EditText) findViewById(R.id.settingsEditTextWeatherKey);
         if(editTextWeatherKey!=null){
             String key = sharedPreferences.getString("wunder_key", "a5d5665e6d63f78c");
             editTextWeatherKey.setText(String.valueOf(key));
@@ -315,18 +292,18 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences",MODE_PRIVATE).edit();
-        editor.putBoolean("solar_user",((Switch)findViewById(R.id.switchSolarUser)).isChecked());
-        editor.putBoolean("live_uploader",((Switch)findViewById(R.id.switchLiveUploader)).isChecked());
-        editor.putString("sid",((EditText)findViewById(R.id.editTextSystemID)).getText().toString());
-        editor.putString("key",((EditText)findViewById(R.id.editTextKey)).getText().toString());
-        editor.putBoolean("auto_refresh",((Switch)findViewById(R.id.switchAutoRefresh)).isChecked());
-        editor.putInt("number_of_systems", Integer.parseInt(((EditText)findViewById(R.id.editTextNumberOfSystems)).getText().toString()));
-        editor.putFloat("flat_rate_tariff", Float.parseFloat(((EditText)findViewById(R.id.editTextTariff)).getText().toString()));
-        editor.putBoolean("wunder_user",((Switch)findViewById(R.id.switchWeatherStation)).isChecked());
-        editor.putBoolean("wunder_uploader",((Switch)findViewById(R.id.switchWeatherUnderground)).isChecked());
-        editor.putString("wunder_key",((EditText)findViewById(R.id.editTextWeatherKey)).getText().toString());
+        editor.putBoolean("solar_user",((Switch)findViewById(R.id.settingsSwitchSolarUser)).isChecked());
+        editor.putBoolean("live_uploader",((Switch)findViewById(R.id.settingsSwitchLiveUploader)).isChecked());
+        editor.putString("sid",((EditText)findViewById(R.id.settingsEditTextPVOutputSystemID)).getText().toString());
+        editor.putString("key",((EditText)findViewById(R.id.settingsEditTextPVOutputKey)).getText().toString());
+        editor.putBoolean("auto_refresh",((Switch)findViewById(R.id.settingsSwitchAutoRefresh)).isChecked());
+        editor.putInt("number_of_systems", Integer.parseInt(((EditText)findViewById(R.id.settingsEditTextNumberOfSystems)).getText().toString()));
+        editor.putFloat("flat_rate_tariff", Float.parseFloat(((EditText)findViewById(R.id.settingsEditTextTariff)).getText().toString()));
+        editor.putBoolean("wunder_user",((Switch)findViewById(R.id.settingsSwitchWeatherStation)).isChecked());
+        editor.putBoolean("wunder_uploader",((Switch)findViewById(R.id.settingsSwitchWeatherUnderground)).isChecked());
+        editor.putString("wunder_key",((EditText)findViewById(R.id.settingsEditTextWeatherKey)).getText().toString());
         editor.commit();
-
+        finish();
     }
 
     private void loadSuburbs(){
@@ -378,7 +355,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setupButtons(){
 
-        ImageButton imageButtonHome = (ImageButton)findViewById(R.id.imageButtonHome);
+        ImageButton imageButtonHome = (ImageButton)findViewById(R.id.settingsImageButtonHome);
         if(imageButtonHome != null){
             imageButtonHome.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -388,7 +365,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        ImageView imageViewLogo = (ImageView) findViewById(R.id.imageViewLogo);
+        ImageView imageViewLogo = (ImageView) findViewById(R.id.settingsImageViewLogo);
         if(imageViewLogo != null){
             imageViewLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -409,7 +386,7 @@ public class SettingsActivity extends AppCompatActivity {
 //        }
 
 
-        ImageButton imageButtonHelp = (ImageButton)findViewById(R.id.imageButtonHelp);
+        ImageButton imageButtonHelp = (ImageButton)findViewById(R.id.settingsImageButtonHelp);
         if(imageButtonHelp != null) {
             imageButtonHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -423,7 +400,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        ImageButton imageButtonCDU = (ImageButton)findViewById(R.id.imageButtonCDU);
+        ImageButton imageButtonCDU = (ImageButton)findViewById(R.id.settingsImageButtonCDU);
         if(imageButtonCDU != null) {
             imageButtonCDU.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -437,7 +414,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        ImageButton imageButtonCRE = (ImageButton)findViewById(R.id.imageButtonCRE);
+        ImageButton imageButtonCRE = (ImageButton)findViewById(R.id.settingsImageButtonCRE);
         if(imageButtonCRE != null) {
             imageButtonCRE.setOnClickListener(new View.OnClickListener() {
                 @Override

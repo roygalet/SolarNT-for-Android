@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/e797cfb5c98c393f37297ec0fa0701442f035d30/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_bab761259f0d2c729477419bbb5666f48e8c0238.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/ad9ad614514fbe22f9263f20a70f8221f4ea8c9a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="518768f3200963fbfec652f498da2c9d39245234">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_9073a76952b8cd1bd5c071fc3c6b8e895f1acd3c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/7d03a0f66c063acab696c1818b09bcf3e2a2f66c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7113302c965566b66df46c6ca75ea301576114a5">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_ce3e665cedc697b296584a498084b676fd76f768.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/d404b28a60220afcd3a780186b7c9388508b28cb/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d6a04527c17597019dad82777c5094a3d60d1c33">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_9874ac56af56d317f2c200685176d42e0498d986.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.1/constraint-layout-solver-1.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1ad79631209e77b0a2730fc112b4cc0c66a95132">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.1_33bd7955f6f33a3897b2aa3015af8023bb415c6e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/efbebb20e1abfe5ad87525c49fcd3f405ca93d5b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="425c7b17887e5c3f8cbdf67ba171bc246f29b42c">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_acc3b3b975cc5b7880285843dcdb76abaaccfb6e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/840af342804560d40f52e0b6b5deb23558a8cfd3/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c5d103b270b3f3b50d8e6b44aa8e068b0de33426">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_3c69219587b5703c024ebe72cae886e77a8cbbb8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/9ffde9a1ec15fcfa4c571d161c20a7f1a2108c88/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="775715f20fc19479343592af2fa4d46c7d00fa5e">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_849c54893f350fa05ee9f5f9b71edacf05edc45e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/0323d91510ee39bf6f1a4dbecae8ba0b335a3398/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="70f23cb87278f89aa51e6f57e8f0fd5266572d95">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_15c56a17822c9a33e03791b0951e13a1ce2f8049.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/414f4510b9116e74829547313a210077a3d97ab7/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="93c1199fcb0a34b980e6fff8350daff62e696ec2">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_445bf4ceb3e068e82eb5c1585d5816c625d0a9aa.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/aed4cf33ef89cf3be0425ce54b616f031a866142/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="93c10d68ab5ea070f15782ae6d3a28d1f1d8f45e">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_fae6233adc014e7f662d3b38700d0769b187b559.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/560bca8c6d071d0055676bce2659d4e937f944da/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="354f8ec77b46859241bc9daa1b7e63d39d8218f4">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_781c55f7afc81d2c7e956192ed942de69938ba84.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.0/support-annotations-25.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="dd84903d2e1af25a6081ef9038ad863cb14ca3a0">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/support-annotations-25.3.0_9670a64820f6adba06ca7aa7c870f2619a55594c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/930e3d507a031c5904dfd2469b0f8a64f3a1f222/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5cc5ef8347a6bafa14556cbd35230aa9b3431bb0">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_fd591f2f90b5506b7b09f9642631129c09eeba22.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="04ab8242e8880c92b78ee54ccdb33a1c58fadd26">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_d5f5e87885119f1254174574990d8baf525359a6/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/369cee266d1f03336674bd206fd07e187c4a08c6/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="fbb206f7a119f66ce171d95aae1225a5b209a8b7">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_e8ac113bd0c8df30b2ab6209a4b0b09b740a6407.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/ef4c87aaa0229027ef27b0e4c9e5234c3378b67d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a3e61044038fb54cddf6b8dc79f41d2b57f42caf">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_18a7c83b02866a089e051940ac24ebf8dd7b8ba6.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_8bf2b1698c13e18713d7039828023e3d94a5e7d1/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/0a7aed6bf6384781998055ef29e5ddb394bb710b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9ab787a20aae245b5b3651ae0b9c38459eb37715">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_28cb9b1e542336834da316cb310a2f269e6a4475.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/roygalet/.android/build-cache/64c7a505f8e86432008be15510e0207e8a223046/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4b746ef0fd46acb5aaf3d9ab9a4cec22c28d3211">
+        <dex dex="/Users/roygalet/StudioProjects/SolarNT-for-Android-20170423/app/build/intermediates/pre-dexed/debug/classes_f143c4c895d78a04b50eec654547fc32661e4c55.jar" />
+    </item>
+
+</items>

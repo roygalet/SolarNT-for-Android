@@ -44,7 +44,7 @@
             android:orientation="horizontal">
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextViewLocation"
+                android:id="@+id/settingsAutoCompleteTextViewLocation"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -54,7 +54,7 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/textViewLocation"
+                android:id="@+id/settingsTextViewLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
@@ -65,21 +65,21 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageViewSearch"
+                android:id="@+id/settingsImageViewSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_margin="4dp"
                 app:srcCompat="@android:drawable/ic_menu_search" />
 
             <ImageView
-                android:id="@+id/imageViewGeolocate"
+                android:id="@+id/settingsImageViewGeolocate"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_margin="4dp"
                 app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
             <ImageView
-                android:id="@+id/imageViewCancel"
+                android:id="@+id/settingsImageViewCancel"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="4dp"
@@ -89,7 +89,7 @@
         </LinearLayout>
 
         <Switch
-            android:id="@+id/switchSolarUser"
+            android:id="@+id/settingsSwitchSolarUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -99,7 +99,7 @@
             android:textOn="Y" />
 
         <Switch
-            android:id="@+id/switchLiveUploader"
+            android:id="@+id/settingsSwitchLiveUploader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -134,7 +134,7 @@
                     android:text="SystemID: " />
 
                 <EditText
-                    android:id="@+id/editTextSystemID"
+                    android:id="@+id/settingsEditTextPVOutputSystemID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -156,7 +156,7 @@
                     android:text="Key: " />
 
                 <EditText
-                    android:id="@+id/editTextKey"
+                    android:id="@+id/settingsEditTextPVOutputKey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -182,7 +182,7 @@
                 android:textStyle="bold" />
 
             <Switch
-                android:id="@+id/switchAutoRefresh"
+                android:id="@+id/settingsSwitchAutoRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -203,7 +203,7 @@
                     android:text="Number of nearby systems to compare:" />
 
                 <EditText
-                    android:id="@+id/editTextNumberOfSystems"
+                    android:id="@+id/settingsEditTextNumberOfSystems"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -239,7 +239,7 @@
                     android:text="Cost per KiloWatt*hour (AU$): " />
 
                 <EditText
-                    android:id="@+id/editTextTariff"
+                    android:id="@+id/settingsEditTextTariff"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.68"
@@ -269,7 +269,7 @@
                 android:text="Resize Image" />
 
             <SeekBar
-                android:id="@+id/seekBar"
+                android:id="@+id/seekBarImageResize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -317,7 +317,7 @@
         </LinearLayout>
 
         <Switch
-            android:id="@+id/switchWeatherStation"
+            android:id="@+id/settingsSwitchWeatherStation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -328,7 +328,7 @@
             android:textOn="Y" />
 
         <Switch
-            android:id="@+id/switchWeatherUnderground"
+            android:id="@+id/settingsSwitchWeatherUnderground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -363,7 +363,7 @@
                     android:text="API Key: " />
 
                 <EditText
-                    android:id="@+id/editTextWeatherKey"
+                    android:id="@+id/settingsEditTextWeatherKey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

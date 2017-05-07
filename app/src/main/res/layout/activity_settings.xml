@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:title = "@string/title_activity_home"
-    tools:context="au.edu.cdu.solarnt.HomeActivity">
+    tools:context="au.edu.cdu.solarnt.SettingsActivity">
 
 
     <RelativeLayout
@@ -31,7 +31,7 @@
         android:id="@+id/relativeLayout6">
 
         <ImageButton
-            android:id="@+id/imageButtonHelp"
+            android:id="@+id/settingsImageButtonHelp"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"
@@ -44,7 +44,7 @@
             app:srcCompat="@drawable/icon_help" />
 
         <ImageButton
-            android:id="@+id/imageButtonHome"
+            android:id="@+id/settingsImageButtonHome"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
@@ -57,11 +57,11 @@
             app:srcCompat="@drawable/icon_home" />
 
         <ImageView
-            android:id="@+id/imageViewLogo"
+            android:id="@+id/settingsImageViewLogo"
             android:layout_width="100dp"
             android:layout_height="48dp"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/imageButtonHome"
+            android:layout_toEndOf="@+id/settingsImageButtonHome"
             app:srcCompat="@drawable/logo_solarnt" />
     </RelativeLayout>
 
@@ -74,7 +74,7 @@
         android:id="@+id/relativeLayout5">
 
         <ImageButton
-            android:id="@+id/imageButtonCDU"
+            android:id="@+id/settingsImageButtonCDU"
             android:layout_width="80dp"
             android:layout_height="64dp"
             android:layout_alignParentBottom="true"
@@ -86,7 +86,7 @@
             app:srcCompat="@drawable/logo_cdu_wedge" />
 
         <ImageButton
-            android:id="@+id/imageButtonCRE"
+            android:id="@+id/settingsImageButtonCRE"
             android:layout_width="240dp"
             android:layout_height="64dp"
             android:layout_alignParentBottom="true"
